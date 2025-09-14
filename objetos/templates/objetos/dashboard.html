@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block active_dashboard %}active{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Cards -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Total de itens</h6>
+                    <h3 class="fw-bold">{{ total_itens }}</h3>
+                    <i class="bi bi-box-seam fs-3 text-primary"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Perdidos</h6>
+                    <h3 class="fw-bold text-danger">{{ perdidos }}</h3>
+                    <i class="bi bi-search fs-3 text-danger"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Encontrados</h6>
+                    <h3 class="fw-bold text-success">{{ encontrados }}</h3>
+                    <i class="bi bi-box fs-3 text-success"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-muted">Devolvidos</h6>
+                    <h3 class="fw-bold text-primary">{{ devolvidos }}</h3>
+                    <i class="bi bi-arrow-repeat fs-3 text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
