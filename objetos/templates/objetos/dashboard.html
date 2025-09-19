@@ -1,51 +1,523 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema AchelF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="bg-emerald-800 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    <span class="text-xl font-bold">AchelF</span>
+                </div>
 
-{% block title %}Dashboard{% endblock %}
-{% block active_dashboard %}active{% endblock %}
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button onclick="showTab('dashboard')" id="tab-dashboard" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
+                        Dashboard
+                    </button>
+                    <button onclick="showTab('cadastrar')" id="tab-cadastrar" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
+                        Cadastrar Objetos
+                    </button>
+                    <button onclick="showTab('devolucao')" id="tab-devolucao" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
+                        Registrar Devolução
+                    </button>
+                    <button onclick="showTab('relatorio')" id="tab-relatorio" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
+                        Gerar Relatório
+                    </button>
+                </nav>
 
-{% block content %}
-<div class="container mt-5">
-    <!-- Cards -->
-    <div class="row g-4">
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Total de itens</h6>
-                    <h3 class="fw-bold">{{ total_itens }}</h3>
-                    <i class="bi bi-box-seam fs-3 text-primary"></i>
-                </div>
+                <!-- Menu Mobile -->
+                <button class="md:hidden">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
         </div>
-        
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Perdidos</h6>
-                    <h3 class="fw-bold text-danger">{{ perdidos }}</h3>
-                    <i class="bi bi-search fs-3 text-danger"></i>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div id="dashboard" class="tab-content">
+        <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Total de itens -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Total de itens</p>
+                            <p class="text-3xl font-bold text-gray-900">2</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 rounded-full">
+                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perdidos -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Perdidos</p>
+                            <p class="text-3xl font-bold text-red-600">1</p>
+                        </div>
+                        <div class="p-3 bg-red-100 rounded-full">
+                            <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Encontrados -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Encontrados</p>
+                            <p class="text-3xl font-bold text-green-600">1</p>
+                        </div>
+                        <div class="p-3 bg-green-100 rounded-full">
+                            <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Devolvidos -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-600">Devolvidos</p>
+                            <p class="text-3xl font-bold text-blue-600">1</p>
+                        </div>
+                        <div class="p-3 bg-blue-100 rounded-full">
+                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Encontrados</h6>
-                    <h3 class="fw-bold text-success">{{ encontrados }}</h3>
-                    <i class="bi bi-box fs-3 text-success"></i>
+        </main>
+    </div>
+
+    <!-- Cadastrar Objetos Content -->
+    <div id="cadastrar" class="tab-content">
+        <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Cadastrar objeto</h1>
+                <p class="text-gray-600">Registre um item perdido ou encontrado</p>
+            </div>
+
+            <form class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Nome do Objeto -->
+                    <div>
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
+                            Nome do Objeto <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="nome" 
+                            name="nome" 
+                            placeholder="Ex: Carteira de couro"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        >
+                    </div>
+
+                    <!-- Categoria -->
+                    <div>
+                        <label for="categoria" class="block text-sm font-medium text-gray-700 mb-2">
+                            Categoria <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            id="categoria" 
+                            name="categoria"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                        >
+                            <option value="">Selecione uma categoria</option>
+                            <option value="documentos">Documentos</option>
+                            <option value="chaves">Chaves</option>
+                            <option value="eletronicos">Eletrônicos</option>
+                            <option value="roupas">Roupas</option>
+                            <option value="acessorios">Acessórios</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <!-- Local -->
+                    <div>
+                        <label for="local" class="block text-sm font-medium text-gray-700 mb-2">
+                            Local <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            id="local" 
+                            name="local"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+                        >
+                            <option value="">Selecione um local</option>
+                            <option value="patio">Pátio</option>
+                            <option value="ginasio">Ginásio</option>
+                            <option value="biblioteca">Biblioteca</option>
+                            <option value="cantina">Cantina</option>
+                            <option value="sala-aula">Sala de Aula</option>
+                            <option value="laboratorio">Laboratório</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <!-- Data -->
+                    <div>
+                        <label for="data" class="block text-sm font-medium text-gray-700 mb-2">
+                            Data <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="data" 
+                            name="data" 
+                            placeholder="__/__/____"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        >
+                    </div>
+                </div>
+
+                <!-- Descrição -->
+                <div class="mt-6">
+                    <label for="descricao" class="block text-sm font-medium text-gray-700 mb-2">
+                        Descrição <span class="text-red-500">*</span>
+                    </label>
+                    <textarea 
+                        id="descricao" 
+                        name="descricao" 
+                        rows="4"
+                        placeholder="Descreva características do objeto"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                    ></textarea>
+                </div>
+
+                <!-- Foto do Objeto -->
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Foto do Objeto <span class="text-red-500">*</span>
+                    </label>
+                    <button 
+                        type="button"
+                        class="px-4 py-2 bg-gray-100 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    >
+                        Inserir foto
+                    </button>
+                </div>
+
+                <!-- Status -->
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-3">
+                        Status <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex space-x-6">
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="status" 
+                                value="perdido" 
+                                checked
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                            >
+                            <span class="ml-2 text-sm text-gray-700">Perdido</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input 
+                                type="radio" 
+                                name="status" 
+                                value="encontrado"
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                            >
+                            <span class="ml-2 text-sm text-gray-700">Encontrado</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-8">
+                    <button 
+                        type="submit"
+                        class="w-full bg-emerald-600 text-white py-3 px-4 rounded-md hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 font-medium"
+                    >
+                        <svg class="inline-block w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Cadastrar Objeto
+                    </button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Registrar Devolução Content -->
+    <div id="devolucao" class="tab-content">
+        <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Registrar Devolução</h1>
+                <p class="text-gray-600">Insira as informações do retirador</p>
+            </div>
+
+            <!-- Informações do Objeto -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Informações do Objeto</h2>
+                
+                <div class="mb-4">
+                    <h3 class="text-base font-medium text-gray-800">Carteira de couro</h3>
+                    <p class="text-gray-600 mt-1">Carteira de couro marrom masculina</p>
+                </div>
+
+                <div class="flex items-center space-x-6 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Pátio
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h3a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h3z"></path>
+                        </svg>
+                        05/09/2025
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm border-0">
-                <div class="card-body">
-                    <h6 class="text-muted">Devolvidos</h6>
-                    <h3 class="fw-bold text-primary">{{ devolvidos }}</h3>
-                    <i class="bi bi-arrow-repeat fs-3 text-primary"></i>
+
+            <!-- Informações do Retirador -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-6">Informações do Retirador</h2>
+                
+                <form class="space-y-6">
+                    <!-- Nome -->
+                    <div>
+                        <label for="nome-retirador" class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
+                        <input 
+                            type="text" 
+                            id="nome-retirador" 
+                            name="nome-retirador" 
+                            placeholder="Nome completo"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        >
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- CPF -->
+                        <div>
+                            <label for="cpf" class="block text-sm font-medium text-gray-700 mb-2">CPF</label>
+                            <input 
+                                type="text" 
+                                id="cpf" 
+                                name="cpf" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            >
+                        </div>
+
+                        <!-- Data de devolução -->
+                        <div>
+                            <label for="data-devolucao" class="block text-sm font-medium text-gray-700 mb-2">Data de devolução</label>
+                            <input 
+                                type="text" 
+                                id="data-devolucao" 
+                                name="data-devolucao" 
+                                placeholder="__/__/____"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Observações -->
+                    <div>
+                        <label for="observacoes" class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                        <textarea 
+                            id="observacoes" 
+                            name="observacoes" 
+                            rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none"
+                        ></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-center">
+                        <button 
+                            type="submit"
+                            class="bg-emerald-600 text-white py-2 px-6 rounded-md hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 font-medium"
+                        >
+                            Marcar como devolvido
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Gerar Relatório Content -->
+    <div id="relatorio" class="tab-content">
+        <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Gerar Relatório</h1>
+                <p class="text-gray-600">Filtre e edite todos os registros</p>
+            </div>
+
+            <!-- Filtros -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+                <div class="flex flex-wrap items-center gap-4">
+                    <button class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"></path>
+                        </svg>
+                        Filtrar
+                    </button>
+                    <button class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h3a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h3z"></path>
+                        </svg>
+                        Data
+                    </button>
+                    <button class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Exportar
+                    </button>
                 </div>
+            </div>
+
+            <!-- Tabela -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Local</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">Carteira de couro</div>
+                                    <div class="text-sm text-gray-500">Carteira de couro marrom masculina</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Documentos</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Pátio</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">05/09/2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                                    <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                                    Devolvido
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="bg-emerald-600 text-white px-3 py-1 rounded text-xs hover:bg-emerald-700 transition-colors">
+                                    Editar
+                                </button>
+                                <button class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition-colors">
+                                    Excluir
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">Molho de chaves</div>
+                                    <div class="text-sm text-gray-500">Molho de chaves com chaveiro do Homem-Aranha</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Chaves</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Ginásio</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">21/08/2025</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="w-8 h-8 bg-gray-200 rounded flex items-center justify-center">
+                                    <svg class="h-4 w-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 border border-red-200">
+                                    Perdido
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <button class="bg-emerald-600 text-white px-3 py-1 rounded text-xs hover:bg-emerald-700 transition-colors">
+                                    Editar
+                                </button>
+                                <button class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition-colors">
+                                    Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Avatar flutuante -->
+        <div class="fixed bottom-6 right-6">
+            <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                M
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all nav buttons
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(button => {
+                button.classList.remove('bg-emerald-700', 'text-white');
+                button.classList.add('hover:text-emerald-200');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to selected nav button
+            const activeButton = document.getElementById('tab-' + tabName);
+            activeButton.classList.add('bg-emerald-700', 'text-white');
+            activeButton.classList.remove('hover:text-emerald-200');
+        }
+
+        // Show dashboard by default
+        showTab('dashboard');
+    </script>
+</body>
+</html>

@@ -34,7 +34,7 @@ class Devolucao(models.Model):
         Objeto, on_delete=models.CASCADE, related_name="devolucao"
     )
     nome_retirante = models.CharField(max_length=100)
-    cpf_retirante = models.CharField(max_length=14)  # formato ###.###.###-##
+    cpf_retirante = models.CharField(max_length=14)  
     data_devolucao = models.DateField()
 
     def __str__(self):
