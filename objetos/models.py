@@ -39,5 +39,11 @@ class Devolucao(models.Model):
 
     def __str__(self):
         return f"Devolução de {self.objeto.tipo} para {self.nome_retirante}"
+    
+class Local(models.Model):
+    nome = models.CharField(max_length=50, unique=True)
+    def __str__(self):
+        return self.nome
+
  
 

@@ -1,9 +1,14 @@
 from django.contrib import admin
-from .models import Categoria, Objeto, Devolucao
+from .models import Categoria, Objeto, Devolucao, Local
 
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
     list_display = ("nome", "descricao", "criado_em", "atualizado_em")
+    search_fields = ("nome",)
+
+@admin.register(Local)
+class LocalAdmin(admin.ModelAdmin):
+    list_display = ("nome",)
     search_fields = ("nome",)
 
 
