@@ -19,5 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('objetos.urls')),  # 🔗 redireciona para as URLs do app objetos
+    path('', include('objetos.urls')), 
+    path('', include('usuarios.urls')),
 ]

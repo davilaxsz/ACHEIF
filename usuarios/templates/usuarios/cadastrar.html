@@ -1,0 +1,231 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cadastro - AcheIF</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Ícones Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+
+    <style>
+        :root {
+            --primary-green: #0b5e3c;
+            --soft-green: #e6f2e9;
+            --dark-gray: #34495e;
+            --white: #fff;
+        }
+
+        body {
+            background: linear-gradient(120deg, var(--primary-green), #07532a);
+            min-height: 100vh;
+            padding: 50px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-gray);
+        }
+
+        .form-wrapper {
+            background: var(--white);
+            border-radius: 12px;
+            max-width: 650px;
+            margin: auto;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+            overflow: hidden;
+        }
+
+        .form-header {
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 2.8rem 1.5rem;
+            text-align: center;
+        }
+
+        .form-header i {
+            font-size: 3.2rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-content {
+            padding: 2.5rem 2rem;
+        }
+
+        .form-section {
+            background-color: var(--soft-green);
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 25px;
+            border: 1px solid #cce5d4;
+        }
+
+        .form-section h5 {
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #d9534f; /* vermelho para required */
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 5px rgba(11, 94, 60, 0.5);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-green);
+            border: none;
+            padding: 14px 0;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: background-color 0.25s ease, transform 0.25s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: #0a4d31;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .login-link {
+            color: var(--primary-green);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            text-decoration: underline;
+        }
+
+        .error-text {
+            color: #d9534f;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        .alert {
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <i class="bi bi-person-plus-fill"></i>
+                <h2>Cadastro de Usuário</h2>
+                <p>Crie sua conta preenchendo os campos abaixo</p>
+            </div>
+
+            <div class="form-content">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Dados de Acesso -->
+                    <div class="form-section">
+                        <h5><i class="bi bi-key"></i> Dados de Acesso</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.username.id_for_label }}" class="form-label required-field">Usuário</label>
+                                {{ form.username|add_class:"form-control" }}
+                                {% if form.username.errors %}
+                                    <div class="error-text">{{ form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.email.id_for_label }}" class="form-label required-field">E-mail</label>
+                                {{ form.email|add_class:"form-control" }}
+                                {% if form.email.errors %}
+                                    <div class="error-text">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <label for="{{ form.password1.id_for_label }}" class="form-label required-field">Senha</label>
+                                {{ form.password1|add_class:"form-control" }}
+                                {% if form.password1.errors %}
+                                    <div class="error-text">{{ form.password1.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.password2.id_for_label }}" class="form-label required-field">Confirmar Senha</label>
+                                {{ form.password2|add_class:"form-control" }}
+                                {% if form.password2.errors %}
+                                    <div class="error-text">{{ form.password2.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados Pessoais -->
+                    <div class="form-section">
+                        <h5><i class="bi bi-person"></i> Dados Pessoais</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.cpf.id_for_label }}" class="form-label required-field">CPF</label>
+                                {{ form.cpf|add_class:"form-control" }}
+                                {% if form.cpf.errors %}
+                                    <div class="error-text">{{ form.cpf.errors }}</div>
+                                {% endif %}
+                                <small class="text-muted">Apenas números</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.nome_mae.id_for_label }}" class="form-label">Nome da Mãe</label>
+                                {{ form.nome_mae|add_class:"form-control" }}
+                                {% if form.nome_mae.errors %}
+                                    <div class="error-text">{{ form.nome_mae.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-submit">
+                        <i class="bi bi-check-circle"></i> Cadastrar
+                    </button>
+
+                    <p class="text-center mt-4 mb-0">
+                        Já possui uma conta? 
+                        <a href="{% url 'login' %}" class="login-link">Faça login aqui</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

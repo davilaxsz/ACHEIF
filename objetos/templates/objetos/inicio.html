@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pt-BR">
   <head>
@@ -19,34 +20,39 @@
   </head>
   <body>
     <div class="min-h-screen bg-gray-50">
-      <header class="bg-emerald-800 text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16.5 9.4 7.55 4.24"></path>
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.29 7 12 12 20.71 7"></polyline>
-                <line x1="12" x2="12" y1="22" y2="12"></line>
-              </svg>
-              <h1 class="text-2xl font-bold">ACHEIF</h1>
-            </div>
-            <nav class="hidden md:flex items-center gap-6">
-              <a href="#" class="hover:text-emerald-200 transition">Início</a>
-              <a href="#" class="hover:text-emerald-200 transition">Objetos Perdidos</a>
-              <a href="#" class="hover:text-emerald-200 transition">Objetos Achados</a>
-              <a href="#" class="hover:text-emerald-200 transition">Contato</a>
-            </nav>
-            <button class="md:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="4" x2="20" y1="12" y2="12"></line>
-                <line x1="4" x2="20" y1="6" y2="6"></line>
-                <line x1="4" x2="20" y1="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </header>
+     <header class="bg-emerald-800 text-white shadow-lg">
+  <div class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- seu ícone e título -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16.5 9.4 7.55 4.24"></path>
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.29 7 12 12 20.71 7"></polyline>
+          <line x1="12" x2="12" y1="22" y2="12"></line>
+        </svg>
+        <h1 class="text-2xl font-bold">ACHEIF</h1>
+      </div>
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="listar_objetos" class="hover:text-emerald-200 transition">Acessar Lista</a>
+        <form method="POST" action="{% url 'logout' %}" class="inline">
+          {% csrf_token %}
+          <button type="submit" class="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">
+            Sair
+          </button>
+        </form>
+      </nav>
+      <button class="md:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
 
       <section class="bg-emerald-700 text-white py-16">
         <div class="container mx-auto px-4">
@@ -217,29 +223,51 @@
         </div>
 
        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Card 1: Objeto Perdido -->
-        <div class="bg-emerald-700 text-white rounded-lg shadow-md p-8">
-          <h3 class="text-2xl font-bold mb-4">Perdeu algo?</h3>
-          <p class="mb-6 text-emerald-100">Registre seu objeto perdido e aumente as chances de recuperá-lo.</p>
-          <button 
-            onclick="window.location.href='{% url 'criar_objeto' %}'"
-            class="bg-white text-emerald-700 font-semibold px-6 py-3 rounded hover:bg-emerald-50 transition">
-            Registrar Objeto Perdido
-          </button>
-        </div>
-
-        <!-- Card 2: Objeto Achado -->
-        <div class="bg-emerald-600 text-white rounded-lg shadow-md p-8">
-          <h3 class="text-2xl font-bold mb-4">Encontrou algo?</h3>
-          <p class="mb-6 text-emerald-100">Ajude alguém registrando o objeto que você encontrou.</p>
-          <button 
-            onclick="window.location.href='{% url 'registrar_devolucao' %}'"
-            class="bg-white text-emerald-600 font-semibold px-6 py-3 rounded hover:bg-emerald-50 transition">
-            Registrar Objeto Achado
-          </button>
-        </div>
+       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Card 1 -->
+      <div class="bg-emerald-700 text-white rounded-lg shadow-md p-8">
+        <h3 class="text-2xl font-bold mb-4">Perdeu algo?</h3>
+        <p class="mb-6 text-emerald-100">Registre seu objeto perdido e aumente as chances de recuperá-lo.</p>
+        <button 
+          onclick="window.location.href='{% url 'objetos:criar_objeto' %}'"
+          class="bg-white text-emerald-700 font-semibold px-6 py-3 rounded hover:bg-emerald-50 transition">
+          Registrar Objeto Perdido
+        </button>
       </div>
 
+      <!-- Card 2 -->
+      <div class="bg-emerald-600 text-white rounded-lg shadow-md p-8">
+        <h3 class="text-2xl font-bold mb-4">Encontrou algo?</h3>
+        <p class="mb-6 text-emerald-100">Ajude alguém registrando o objeto que você encontrou.</p>
+        <button 
+          onclick="window.location.href='{% url 'objetos:registrar_devolucao' %}'"
+          class="bg-white text-emerald-600 font-semibold px-6 py-3 rounded hover:bg-emerald-50 transition">
+          Registrar Objeto Achado
+        </button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bg-emerald-600 text-white rounded-lg shadow-md p-8">
+        <h3 class="text-2xl font-bold mb-4">Busca rápida?</h3>
+        <p class="mb-6 text-emerald-100">Cadastre uma nova categoria para facilitar sua busca.</p>
+        <button 
+          onclick="window.location.href='{% url 'objetos:registrar_devolucao' %}'"
+          class="bg-white text-emerald-600 font-semibold px-6 py-3 rounded hover:bg-emerald-50 transition">
+          Registrar Categoria
+        </button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bg-emerald-600 text-white rounded-lg shadow-md p-8">
+        <h3 class="text-2xl font-bold mb-4">Onde perdeu?</h3>
+        <p class="mb-6 text-emerald-100">Informe novos locais.</p>
+        <button 
+          onclick="window.location.href='{% url 'objetos:registrar_devolucao' %}'"
+          class="bg-white text-emerald-600 font-semibold px-6 py-3 rounded hover:bg-emerald-50 transition">
+          Registrar Local
+        </button>
+      </div>
+    </div>
 
 
       <footer class="bg-emerald-800 text-white mt-16">
