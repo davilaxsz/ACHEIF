@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ACHEIF - Listagem de Objetos</title>
+    <title>Listagem de Categorias</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
@@ -29,14 +29,14 @@
     <div class="min-h-screen bg-gray-50">
       <header class="bg-emerald-800 text-white shadow-lg">
         <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 class="text-2xl font-bold">Listagem de Objetos</h1>
+          <h1 class="text-2xl font-bold">Listagem de Categorias</h1>
           <a href="{% url 'objetos:dashboard' %}" class="bg-white text-emerald-700 px-4 py-2 rounded hover:bg-emerald-50 transition font-semibold">Voltar</a>
         </div>
       </header>
 
       <main class="container mx-auto px-4 py-12">
         <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Objetos Registrados</h2>
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Categorias disponíveis</h2>
           <div class="overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>

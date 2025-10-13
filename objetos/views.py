@@ -37,7 +37,7 @@ def editar_objeto(request, id):
             return redirect('objetos:listar_objetos')
     else:
         form = ObjetoForm(instance=objeto)
-    return render(request, 'objetos/form_objeto.html', {'form': form, 'objeto': objeto})
+    return render(request, 'objetos/criar_objeto.html', {'form': form, 'objeto': objeto})
 
 @require_POST
 def apagar_objeto(request, id):
