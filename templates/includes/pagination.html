@@ -1,0 +1,49 @@
+{% if page_obj.has_other_pages %}
+<nav class="mt-6">
+    <ul class="flex space-x-2 justify-center items-center text-sm">
+
+        <!-- Botão Anterior -->
+        {% if page_obj.has_previous %}
+        <li>
+            <a href="?{% if categoria_id %}categoria={{ categoria_id }}&{% endif %}
+                     {% if local_achado %}local={{ local_achado }}&{% endif %}
+                     page={{ page_obj.previous_page_number }}"
+               class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+                ◄ Anterior
+            </a>
+        </li>
+        {% endif %}
+
+        <!-- Números das páginas -->
+        {% for num in page_obj.paginator.page_range %}
+        <li>
+            <a href="?{% if categoria_id %}categoria={{ categoria_id }}&{% endif %}
+                     {% if local_achado %}local={{ local_achado }}&{% endif %}
+                     page={{ num }}"
+               class="px-3 py-1 rounded 
+               {% if page_obj.number == num %}bg-emerald-700 text-white{% else %}bg-gray-200 hover:bg-gray-300{% endif %}">
+                {{ num }}
+            </a>
+        </li>
+        {% endfor %}
+
+        <!-- Botão Próxima -->
+        {% if page_obj.has_next %}
+        <li>
+            <a href="?{% if categoria_id %}categoria={{ categoria_id }}&{% endif %}
+                     {% if local_achado %}local={{ local_achado }}&{% endif %}
+                     page={{ page_obj.next_page_number }}"
+               class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+                Próxima ►
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <!-- Texto informativo -->
+    <p class="text-center text-gray-600 mt-2">
+        Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }}
+        de {{ page_obj.paginator.count }} objetos
+    </p>
+</nav>
+{% endif %}

@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
-from .models import Objeto
-from .forms import ObjetoForm
+from .models import Objeto, Categoria, Local
+from .forms import ObjetoForm, CategoriaForm, LocalForm 
+from django.core.paginator import Paginator
 
 def dashboard(request):
     return render(request, "objetos/inicio.html")
@@ -22,11 +23,49 @@ def criar_objeto(request):
             return redirect('objetos:listar_objetos')
     else:
         form = ObjetoForm()
-    return render(request, 'objetos/criar_objeto.html', {'form': form})
+    
+    categorias = Categoria.objects.all()
+    locais = Local.objects.all()
+
+    return render(request, 'objetos/criar_objeto.html', {
+        'form': form,
+        'categorias': categorias,
+        'locais': locais,
+    })
+
 
 def listar_objetos(request):
+    # Pegar os filtros da URL
+    categoria_id = request.GET.get('categoria')
+    local_nome = request.GET.get('local')
+
+    # Filtrar os objetos conforme os filtros recebidos
     objetos = Objeto.objects.all().select_related('categoria')
-    return render(request, 'objetos/listar_objetos.html', {'objetos': objetos})
+
+    if categoria_id:
+        objetos = objetos.filter(categoria_id=categoria_id)
+    if local_nome:
+        objetos = objetos.filter(local_achado=local_nome)
+
+
+    paginator = Paginator(objetos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Pegar todas categorias e locais para exibir nos filtros
+    categorias = Categoria.objects.all()
+    locais = Local.objects.all()
+
+    return render(request, 'objetos/listar_objetos.html', {
+        'objetos': page_obj,
+        'page_obj': page_obj,
+        'categorias': categorias,
+        'locais': locais,
+        'categoria_selecionada': categoria_id,
+        'local_selecionado': local_nome,
+    })
+
+
 
 def editar_objeto(request, id):
     objeto = get_object_or_404(Objeto, pk=id)
@@ -47,13 +86,9 @@ def apagar_objeto(request, id):
 
 #CRUD CATEGORIA
 
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Categoria
-from .forms import CategoriaForm
-
 def listar_categorias(request):
     categorias = Categoria.objects.all()
-    return render(request, 'objetos/listar_categorias.html', {'categorias': categorias})
+    return render(request, 'objetos/categoria/listar_categorias.html', {'categorias': categorias})
 
 def criar_categoria(request):
     if request.method == 'POST':
@@ -63,7 +98,7 @@ def criar_categoria(request):
             return redirect('objetos:listar_categorias')
     else:
         form = CategoriaForm()
-    return render(request, 'objetos/form_categoria.html', {'form': form})
+    return render(request, 'objetos/categoria/criar_categoria.html', {'form': form})
 
 def editar_categoria(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
@@ -74,7 +109,7 @@ def editar_categoria(request, pk):
             return redirect('objetos:listar_categorias')
     else:
         form = CategoriaForm(instance=categoria)
-    return render(request, 'objetos/form_categoria.html', {'form': form, 'categoria': categoria})
+    return render(request, 'objetos/categoria/criar_categoria.html', {'form': form, 'categoria': categoria})
 
 def apagar_categoria(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
@@ -82,4 +117,38 @@ def apagar_categoria(request, pk):
         categoria.delete()
         return redirect('objetos:listar_categorias')
     return render(request, 'objetos/confirma_apagar_categoria.html', {'categoria': categoria})
+
+#CRUD LOCAL 
+def listar_locais(request):
+    locais = Local.objects.all()
+    return render(request, 'objetos/local/listar_locais.html', {'locais': locais})
+
+def criar_local(request):
+    if request.method == 'POST':
+        form = LocalForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('objetos:listar_locais')
+    else:
+        form = LocalForm()
+    return render(request, 'objetos/local/criar_local.html', {'form': form})
+
+def editar_local(request, pk):
+    local = get_object_or_404(Local, pk=pk)
+    if request.method == 'POST':
+        form = LocalForm(request.POST, instance=local)
+        if form.is_valid():
+            form.save()
+            return redirect('objetos:listar_locais')
+    else:
+        form = LocalForm(instance=local)
+    return render(request, 'objetos/local/criar_local.html', {'form': form, 'local': local})
+
+@require_POST
+def apagar_local(request, id):
+    local = get_object_or_404(Local, pk=id)
+    local.delete()
+    return redirect('objetos:listar_locais')
+
+
 

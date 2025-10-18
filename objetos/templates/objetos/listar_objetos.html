@@ -1,43 +1,54 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ACHEIF - Listagem de Objetos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-      .min-h-screen {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
-      main.container {
-        flex: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="min-h-screen bg-gray-50">
-      <header class="bg-emerald-800 text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 class="text-2xl font-bold">Listagem de Objetos</h1>
-          <a href="{% url 'objetos:dashboard' %}" class="bg-white text-emerald-700 px-4 py-2 rounded hover:bg-emerald-50 transition font-semibold">Voltar</a>
-        </div>
-      </header>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
 
-      <main class="container mx-auto px-4 py-12">
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Objetos Registrados</h2>
-          <div class="overflow-x-auto">
+{% block title %}Listagem de Objetos{% endblock %}
+{% block active_objetos %}active{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Botão Voltar -->
+    <div class="mb-4">
+        <a href="{% url 'objetos:dashboard' %}" 
+           class="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition">
+           ◄ Voltar
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Objetos Registrados</h2>
+            <a href="{% url 'objetos:criar_objeto' %}" 
+               class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded transition font-semibold">
+                + Novo Objeto
+            </a>
+        </div>
+
+        <!-- Formulário de Filtros -->
+        <form method="GET" class="flex flex-wrap gap-4 mb-6">
+            <select name="categoria" class="border rounded px-3 py-2">
+              <option value="">Todas Categorias</option>
+              {% for cat in categorias %}
+                <option value="{{ cat.id }}" {% if cat.id|stringformat:"s" == categoria_selecionada %}selected{% endif %}>
+                  {{ cat.nome }}
+                </option>
+              {% endfor %}
+            </select>
+
+            <select name="local" class="border rounded px-3 py-2">
+              <option value="">Todos Locais</option>
+              {% for loc in locais %}
+                <option value="{{ loc.nome }}" {% if loc.nome == local_selecionado %}selected{% endif %}>
+                  {{ loc.nome }}
+                </option>
+              {% endfor %}
+            </select>
+
+            <button type="submit" class="bg-emerald-700 text-white px-4 py-2 rounded hover:bg-emerald-800 transition">
+              Filtrar
+            </button>
+        </form>
+
+        <div class="overflow-x-auto">
             <table class="w-full border-collapse">
               <thead>
                 <tr class="bg-emerald-700 text-white">
@@ -84,13 +95,47 @@
                 {% endfor %}
               </tbody>
             </table>
-          </div>
         </div>
-      </main>
 
-      <footer class="bg-emerald-800 text-white mt-16 py-6 text-center">
-        <p>&copy; 2025 ACHEIF. Todos os direitos reservados.</p>
-      </footer>
+        <!-- Paginação -->
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-6">
+            <ul class="flex justify-center gap-2">
+              {% if page_obj.has_previous %}
+                <li>
+                  <a href="?page={{ page_obj.previous_page_number }}
+                            {% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}
+                            {% if local_selecionado %}&local={{ local_selecionado }}{% endif %}"
+                     class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition">◄ Anterior</a>
+                </li>
+              {% endif %}
+
+              {% for num in page_obj.paginator.page_range %}
+                <li>
+                  <a href="?page={{ num }}
+                            {% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}
+                            {% if local_selecionado %}&local={{ local_selecionado }}{% endif %}"
+                     class="px-3 py-1 rounded {% if page_obj.number == num %}bg-emerald-700 text-white{% else %}bg-gray-200 hover:bg-gray-300{% endif %} transition">
+                    {{ num }}
+                  </a>
+                </li>
+              {% endfor %}
+
+              {% if page_obj.has_next %}
+                <li>
+                  <a href="?page={{ page_obj.next_page_number }}
+                            {% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}
+                            {% if local_selecionado %}&local={{ local_selecionado }}{% endif %}"
+                     class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition">Próxima ►</a>
+                </li>
+              {% endif %}
+            </ul>
+
+            <p class="text-center mt-2 text-gray-600">
+              Mostrando {{ page_obj.start_index }}-{{ page_obj.end_index }} de {{ page_obj.paginator.count }} objetos
+            </p>
+        </nav>
+        {% endif %}
     </div>
-  </body>
-</html>
+</div>
+{% endblock %}
