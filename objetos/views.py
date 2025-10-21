@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 from .models import Objeto, Categoria, Local
 from .forms import ObjetoForm, CategoriaForm, LocalForm 
 from django.core.paginator import Paginator
 
+@login_required
 def dashboard(request):
     return render(request, "objetos/inicio.html")
 
