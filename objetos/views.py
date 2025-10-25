@@ -7,7 +7,13 @@ from django.core.paginator import Paginator
 
 @login_required
 def dashboard(request):
-    return render(request, "objetos/inicio.html")
+    # Pegando os 5 objetos mais recentes ordenados pela data de achado
+    objetos_recentes = Objeto.objects.select_related('categoria').order_by('-data_achado')[:5]
+
+    return render(request, "objetos/inicio.html", {
+        'objetos_recentes': objetos_recentes,
+    })
+
 
 def relatorios(request):
     return render(request, "objetos/relatorios.html")

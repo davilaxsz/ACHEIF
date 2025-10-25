@@ -10,16 +10,20 @@
 </head>
 <body class="min-h-screen bg-gray-50 flex flex-col">
 
-    <!-- Navbar -->
+    <!-- Navbar / Cabeçalho -->
     <header class="bg-emerald-800 text-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <span class="text-2xl font-bold">ACHEIF</span>
                 <nav class="hidden md:flex items-center space-x-4">
-                    <a href="{% url 'objetos:listar_locais' %}" class="px-3 py-2 rounded-md text-sm font-medium {% block active_locais %}{% endblock %} hover:text-emerald-200 transition">Locais</a>
-                    <a href="{% url 'objetos:listar_objetos' %}" class="px-3 py-2 rounded-md text-sm font-medium {% block active_objetos %}{% endblock %} hover:text-emerald-200 transition">Objetos</a>
-                    <a href="{% url 'objetos:listar_objetos' %}" class="px-3 py-2 rounded-md text-sm font-medium {% block active_devolucoes %}{% endblock %} hover:text-emerald-200 transition">Devoluções</a>
-                    <a href="{% url 'objetos:listar_categorias' %}" class="px-3 py-2 rounded-md text-sm font-medium {% block active_categorias %}{% endblock %} hover:text-emerald-200 transition">Categorias</a>
+                    <a href="{% url 'objetos:listar_locais' %}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_locais %}{% endblock %} hover:text-emerald-200 transition">Locais</a>
+                    <a href="{% url 'objetos:listar_objetos' %}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_objetos %}{% endblock %} hover:text-emerald-200 transition">Objetos</a>
+                    <a href="{% url 'objetos:listar_objetos' %}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_devolucoes %}{% endblock %} hover:text-emerald-200 transition">Devoluções</a>
+                    <a href="{% url 'objetos:listar_categorias' %}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_categorias %}{% endblock %} hover:text-emerald-200 transition">Categorias</a>
                 </nav>
             </div>
         </div>
@@ -30,9 +34,9 @@
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Footer / Rodapé -->
     <footer class="bg-emerald-800 text-white py-6 text-center mt-auto">
-        <p>&copy; 2025 ACHEIF. Todos os direitos reservados.</p>
+        <p>&copy; {% now "Y" %} ACHEIF. Todos os direitos reservados.</p>
     </footer>
 
 </body>
