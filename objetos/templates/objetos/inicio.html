@@ -33,7 +33,6 @@
               <h1 class="text-2xl font-bold">ACHEIF</h1>
             </div>
             <nav class="hidden md:flex items-center gap-6">
-              <a href="listar_objetos" class="hover:text-emerald-200 transition">Acessar Lista</a>
               <form method="POST" action="{% url 'logout' %}" class="inline">
                 {% csrf_token %}
                 <button type="submit" class="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition">

@@ -49,9 +49,11 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <a href="{% url 'objetos:criar_categoria' %}"
+
+                    <!-- ✅ Ajuste: link com parâmetro "next" -->
+                    <a href="{% url 'objetos:criar_categoria' %}?next={% url 'objetos:criar_objeto' %}"
                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded transition text-sm">
-                       + Categoria
+                       + 
                     </a>
                 </div>
             </div>
@@ -71,9 +73,11 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <a href="{% url 'objetos:criar_local' %}"
+
+                    <!-- ✅ Ajuste: link com parâmetro "next" -->
+                    <a href="{% url 'objetos:criar_local' %}?next={% url 'objetos:criar_objeto' %}"
                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded transition text-sm">
-                       + Local
+                       +
                     </a>
                 </div>
             </div>

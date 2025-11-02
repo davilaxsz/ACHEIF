@@ -1,149 +1,72 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema AchelF - Registrar Devolução</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <header class="bg-emerald-800 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <span class="text-xl font-bold">AchelF</span>
-                </div>
+{% extends 'base.html' %}
+{% load static %}
 
-                <!-- Navigation -->
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
-                        Dashboard
-                    </a>
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
-                        Cadastrar Objetos
-                    </a>
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium bg-emerald-700 text-white">
-                        Registrar Devolução
-                    </a>
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium hover:text-emerald-200 transition-colors">
-                        Gerar Relatório
-                    </a>
-                </nav>
+{% block title %}Registrar Devolução - ACHEIF{% endblock %}
+{% block active_devolucoes %}bg-emerald-900 text-emerald-200{% endblock %}
 
-                <!-- Menu Mobile -->
-                <button class="md:hidden">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </header>
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <h1 class="text-2xl font-bold text-emerald-800 mb-6 text-center">
+        Registrar Devolução
+    </h1>
 
-    <!-- Main Content -->
-    <main class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <!-- Page Header -->
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-900">Registrar Devolução</h1>
-            <p class="text-gray-600 mt-2">Insira as informações do retirador</p>
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Objeto -->
+        <div>
+            <label for="id_objeto" class="block text-sm font-medium text-gray-700">Objeto</label>
+            {{ form.objeto }}
+            {% if form.objeto.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.objeto.errors }}</p>
+            {% endif %}
         </div>
 
-        <!-- Form Container -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <!-- Informações do Objeto -->
-            <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Informações do Objeto</h2>
-                
-                <div class="bg-gray-50 rounded-lg p-4">
-                    <h3 class="text-base font-medium text-gray-900 mb-2">Carteira de couro</h3>
-                    <p class="text-gray-600 mb-3">Carteira de couro marrom masculina</p>
-                    
-                    <div class="flex items-center space-x-6 text-sm text-gray-500">
-                        <div class="flex items-center space-x-1">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <span>Pátio</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            <span>05/09/2025</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Informações do Retirador -->
-            <div class="mb-8">
-                <h2 class="text-lg font-semibold text-gray-900 mb-6">Informações do Retirador</h2>
-                
-                <div class="space-y-6">
-                    <!-- Nome -->
-                    <div>
-                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
-                        <input 
-                            type="text" 
-                            id="nome" 
-                            name="nome" 
-                            placeholder="Nome completo"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                        >
-                    </div>
-
-                    <!-- CPF e Data de devolução -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="cpf" class="block text-sm font-medium text-gray-700 mb-2">CPF</label>
-                            <input 
-                                type="text" 
-                                id="cpf" 
-                                name="cpf" 
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            >
-                        </div>
-                        <div>
-                            <label for="data-devolucao" class="block text-sm font-medium text-gray-700 mb-2">Data de devolução</label>
-                            <input 
-                                type="text" 
-                                id="data-devolucao" 
-                                name="data-devolucao" 
-                                placeholder="__/__/____"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            >
-                        </div>
-                    </div>
-
-                    <!-- Observações -->
-                    <div>
-                        <label for="observacoes" class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
-                        <textarea 
-                            id="observacoes" 
-                            name="observacoes" 
-                            rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                        ></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="flex justify-center">
-                <button 
-                    type="submit"
-                    class="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                >
-                    Marcar como devolvido
-                </button>
-            </div>
+        <!-- Nome do Retirante -->
+        <div>
+            <label for="id_nome_retirante" class="block text-sm font-medium text-gray-700">
+                Nome do Retirante
+            </label>
+            {{ form.nome_retirante }}
+            {% if form.nome_retirante.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.nome_retirante.errors }}</p>
+            {% endif %}
         </div>
-    </main>
-</body>
-</html>
+
+        <!-- CPF -->
+        <div>
+            <label for="id_cpf_retirante" class="block text-sm font-medium text-gray-700">
+                CPF do Retirante
+            </label>
+            {{ form.cpf_retirante }}
+            {% if form.cpf_retirante.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.cpf_retirante.errors }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Data de Devolução -->
+        <div>
+            <label for="id_data_devolucao" class="block text-sm font-medium text-gray-700">
+                Data da Devolução
+            </label>
+            {{ form.data_devolucao }}
+            {% if form.data_devolucao.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.data_devolucao.errors }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Botões -->
+        <div class="flex justify-between items-center pt-4">
+            <a href="{% url 'objetos:listar_objetos' %}" 
+               class="text-emerald-800 hover:underline font-medium">
+                ← Voltar
+            </a>
+
+            <button type="submit"
+                class="bg-emerald-800 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition">
+                Registrar Devolução
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

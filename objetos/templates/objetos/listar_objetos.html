@@ -5,6 +5,23 @@
 {% block active_objetos %}active{% endblock %}
 
 {% block content %}
+
+<div class="bg-white rounded-lg shadow-xl p-2 flex gap-2">
+              <input
+                type="text"
+                placeholder="Buscar objeto perdido..."
+                class="flex-1 px-4 py-3 text-gray-800 outline-none rounded"
+              />
+              <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded flex items-center gap-2 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.3-4.3"></path>
+                </svg>
+                Buscar
+              </button>
+            </div>
+
+
 <div class="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
     <!-- Botão Voltar -->
     <div class="mb-4">
@@ -13,6 +30,7 @@
            ◄ Voltar
         </a>
     </div>
+
 
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex justify-between items-center mb-6">

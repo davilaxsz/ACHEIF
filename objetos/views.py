@@ -99,14 +99,22 @@ def listar_categorias(request):
     return render(request, 'objetos/categoria/listar_categorias.html', {'categorias': categorias})
 
 def criar_categoria(request):
+    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
         if form.is_valid():
             form.save()
+            if next_url:
+                return redirect(next_url)
             return redirect('objetos:listar_categorias')
     else:
         form = CategoriaForm()
-    return render(request, 'objetos/categoria/criar_categoria.html', {'form': form})
+
+    return render(request, 'objetos/categoria/criar_categoria.html', {
+        'form': form,
+        'next': next_url
+    })
 
 def editar_categoria(request, pk):
     categoria = get_object_or_404(Categoria, pk=pk)
@@ -132,15 +140,22 @@ def listar_locais(request):
     return render(request, 'objetos/local/listar_locais.html', {'locais': locais})
 
 def criar_local(request):
+    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.method == 'POST':
         form = LocalForm(request.POST)
         if form.is_valid():
             form.save()
+            if next_url:
+                return redirect(next_url)
             return redirect('objetos:listar_locais')
     else:
         form = LocalForm()
-    return render(request, 'objetos/local/criar_local.html', {'form': form})
 
+    return render(request, 'objetos/local/criar_local.html', {
+        'form': form,
+        'next': next_url
+    })
 def editar_local(request, pk):
     local = get_object_or_404(Local, pk=pk)
     if request.method == 'POST':
