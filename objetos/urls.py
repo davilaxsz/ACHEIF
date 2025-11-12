@@ -19,5 +19,4 @@ urlpatterns = [
     path('local/criar/', views.criar_local, name='criar_local'),
     path('local/<int:pk>/editar/', views.editar_local, name='editar_local'),
     path('local/<int:pk>/apagar/', views.apagar_local, name='apagar_local'),
-
 ]

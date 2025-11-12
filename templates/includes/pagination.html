@@ -2,7 +2,6 @@
 <nav class="mt-6">
     <ul class="flex space-x-2 justify-center items-center text-sm">
 
-        <!-- Botão Anterior -->
         {% if page_obj.has_previous %}
         <li>
             <a href="?{% if categoria_id %}categoria={{ categoria_id }}&{% endif %}
@@ -14,7 +13,6 @@
         </li>
         {% endif %}
 
-        <!-- Números das páginas -->
         {% for num in page_obj.paginator.page_range %}
         <li>
             <a href="?{% if categoria_id %}categoria={{ categoria_id }}&{% endif %}
@@ -27,7 +25,6 @@
         </li>
         {% endfor %}
 
-        <!-- Botão Próxima -->
         {% if page_obj.has_next %}
         <li>
             <a href="?{% if categoria_id %}categoria={{ categoria_id }}&{% endif %}
@@ -40,7 +37,6 @@
         {% endif %}
     </ul>
 
-    <!-- Texto informativo -->
     <p class="text-center text-gray-600 mt-2">
         Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }}
         de {{ page_obj.paginator.count }} objetos

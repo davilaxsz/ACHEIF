@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Objeto, Categoria, Local
 from .forms import ObjetoForm, CategoriaForm, LocalForm 
 from django.core.paginator import Paginator
 
 @login_required
 def dashboard(request):
-    # Pegando os 5 objetos mais recentes ordenados pela data de achado
     objetos_recentes = Objeto.objects.select_related('categoria').order_by('-data_achado')[:5]
 
     return render(request, "objetos/inicio.html", {
@@ -77,14 +77,26 @@ def listar_objetos(request):
 
 def editar_objeto(request, id):
     objeto = get_object_or_404(Objeto, pk=id)
+    categorias = Categoria.objects.all()
+    locais = Local.objects.all()
+
     if request.method == 'POST':
-        form = ObjetoForm(request.POST, instance=objeto)
+        form = ObjetoForm(request.POST, request.FILES, instance=objeto)
         if form.is_valid():
             form.save()
+            messages.success(request, "Objeto editado com sucesso.")
             return redirect('objetos:listar_objetos')
+        else:
+            messages.error(request, "Por favor corrija os erros abaixo.")
     else:
         form = ObjetoForm(instance=objeto)
-    return render(request, 'objetos/criar_objeto.html', {'form': form, 'objeto': objeto})
+
+    return render(request, 'objetos/criar_objeto.html', {
+        'form': form,
+        'objeto': objeto,
+        'categorias': categorias,
+        'locais': locais,
+    })
 
 @require_POST
 def apagar_objeto(request, id):
