@@ -25,21 +25,26 @@
                     <h1 class="text-2xl font-bold">ACHEIF</h1>
                 </div>
 
-                <nav class="hidden md:flex items-center space-x-7">
-                    <button 
-                        onclick="window.location.href='{% url 'objetos:dashboard' %}'"
-                        class="bg-white text-emerald-600 font-semibold px-4 py-2 rounded hover:bg-emerald-50 transition">
-                        Início
-                    </button>
-                    <a href="{% url 'objetos:listar_locais' %}" 
-                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_locais %}{% endblock %} hover:text-emerald-200 transition">Locais</a>
-                    <a href="{% url 'objetos:listar_objetos' %}" 
-                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_objetos %}{% endblock %} hover:text-emerald-200 transition">Objetos</a>
-                    <a href="{% url 'objetos:listar_objetos' %}" 
-                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_devolucoes %}{% endblock %} hover:text-emerald-200 transition">Devoluções</a>
-                    <a href="{% url 'objetos:listar_categorias' %}" 
-                       class="px-3 py-2 rounded-md text-sm font-medium {% block active_categorias %}{% endblock %} hover:text-emerald-200 transition">Categorias</a>
-                </nav>
+                <div class="flex items-center space-x-7">
+                    <nav class="hidden md:flex items-center space-x-7">
+                        <a href="{% url 'objetos:listar_locais' %}" 
+                           class="px-3 py-2 rounded-md text-sm font-medium {% block active_locais %}{% endblock %} hover:text-emerald-200 transition">Locais</a>
+                        <a href="{% url 'objetos:listar_objetos' %}" 
+                           class="px-3 py-2 rounded-md text-sm font-medium {% block active_objetos %}{% endblock %} hover:text-emerald-200 transition">Objetos</a>
+                        <a href="{% url 'objetos:listar_objetos' %}" 
+                           class="px-3 py-2 rounded-md text-sm font-medium {% block active_devolucoes %}{% endblock %} hover:text-emerald-200 transition">Devoluções</a>
+                        <a href="{% url 'objetos:listar_categorias' %}" 
+                           class="px-3 py-2 rounded-md text-sm font-medium {% block active_categorias %}{% endblock %} hover:text-emerald-200 transition">Categorias</a>
+                    </nav>
+
+                    <!-- Botão Sair -->
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition text-sm font-medium">
+                            Sair
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </header>

@@ -180,10 +180,11 @@ def editar_local(request, pk):
     return render(request, 'objetos/local/criar_local.html', {'form': form, 'local': local})
 
 @require_POST
-def apagar_local(request, id):
-    local = get_object_or_404(Local, pk=id)
+def apagar_local(request, pk):
+    local = get_object_or_404(Local, pk=pk)
     local.delete()
     return redirect('objetos:listar_locais')
+
 
 
 

@@ -5,7 +5,7 @@ from .models import Objeto, Categoria, Local
 class ObjetoForm(forms.ModelForm):
     class Meta:
         model = Objeto
-        fields = ['tipo', 'descricao', 'data_achado', 'local_achado', 'categoria', 'status']
+        fields = ['tipo', 'descricao', 'foto', 'categoria', 'local_achado', 'data_achado', 'status']
         widgets = {
             'data_achado': forms.DateInput(attrs={'type': 'date'}),
         }

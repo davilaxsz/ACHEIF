@@ -10,6 +10,8 @@ class Categoria(models.Model):
         return self.nome
 
 
+from django.db import models
+
 class Objeto(models.Model):
     STATUS_CHOICES = [
         ('aguardando', 'Aguardando Devolução'),
@@ -18,6 +20,7 @@ class Objeto(models.Model):
 
     tipo = models.CharField(max_length=100)
     descricao = models.TextField()
+    foto = models.ImageField(upload_to='objetos_fotos/', null=True, blank=True)  # novo campo
     data_achado = models.DateField()
     local_achado = models.CharField(max_length=100)
     categoria = models.ForeignKey(
@@ -27,6 +30,7 @@ class Objeto(models.Model):
 
     def __str__(self):
         return f"{self.tipo} ({self.get_status_display()})"
+
 
 
 class Devolucao(models.Model):

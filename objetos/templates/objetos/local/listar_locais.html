@@ -33,7 +33,7 @@
                            title="Editar">
                             Editar
                         </a>
-                        <form method="post" action="{% url 'objetos:apagar_local' local.pk %}" style="display:inline;">
+                        <form method="post" action="{% url 'objetos:apagar_local' local.id %}" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" 
                                     class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition" 

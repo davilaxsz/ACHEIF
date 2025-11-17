@@ -12,14 +12,20 @@
             <h1 class="text-2xl font-bold text-gray-900 mb-1">Cadastrar Objeto</h1>
             <p class="text-gray-600">Registre um item perdido ou encontrado</p>
         </div>
-        <a href="{% url 'objetos:listar_objetos' %}" 
-           class="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 transition">
-           ◄ Voltar
-        </a>
+        <div class="flex gap-2">
+            <a href="{% url 'objetos:listar_objetos' %}" 
+               class="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 transition">
+               ◄ Voltar para lista
+            </a>
+            <a href="{% url 'objetos:dashboard' %}" 
+               class="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 transition">
+               Dashboard
+            </a>
+        </div>
     </div>
 
     <!-- Form -->
-    <form method="POST" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
+    <form method="POST" enctype="multipart/form-data" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
         {% csrf_token %}
 
         <!-- Tipo do Objeto -->
@@ -50,10 +56,9 @@
                         {% endfor %}
                     </select>
 
-                    <!-- ✅ Ajuste: link com parâmetro "next" -->
                     <a href="{% url 'objetos:criar_categoria' %}?next={% url 'objetos:criar_objeto' %}"
                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded transition text-sm">
-                       + 
+                       +
                     </a>
                 </div>
             </div>
@@ -74,7 +79,6 @@
                         {% endfor %}
                     </select>
 
-                    <!-- ✅ Ajuste: link com parâmetro "next" -->
                     <a href="{% url 'objetos:criar_local' %}?next={% url 'objetos:criar_objeto' %}"
                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded transition text-sm">
                        +
@@ -102,6 +106,18 @@
             {{ form.descricao|add_class:"w-full h-24 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none" }}
             {% if form.descricao.errors %}
                 <p class="text-red-600 text-sm mt-1">{{ form.descricao.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <!-- Foto -->
+        <div>
+            <label for="id_foto" class="block text-sm font-medium text-gray-700 mb-1">
+                Foto do Objeto
+            </label>
+            <input type="file" name="foto" id="id_foto" accept="image/*"
+                   class="w-full border border-gray-300 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+            {% if form.foto.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.foto.errors.0 }}</p>
             {% endif %}
         </div>
 
