@@ -6,21 +6,29 @@
 
 {% block content %}
 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+
     <!-- Page Header -->
     <div class="mb-6 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold text-gray-900 mb-1">Cadastrar Objeto</h1>
             <p class="text-gray-600">Registre um item perdido ou encontrado</p>
         </div>
-        <div class="flex gap-2">
-            <a href="{% url 'objetos:listar_objetos' %}" 
-               class="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 transition">
-               ◄ Voltar para lista
+
+        <!-- BOTÕES VERDES PADRONIZADOS -->
+        <div class="flex gap-3">
+
+            <!-- Voltar para lista -->
+            <a href="{% url 'objetos:listar_objetos' %}"
+               class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
+                ← Voltar para lista
             </a>
-            <a href="{% url 'objetos:dashboard' %}" 
-               class="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 transition">
-               Dashboard
+
+            <!-- Dashboard -->
+            <a href="{% url 'objetos:dashboard' %}"
+               class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
+                Dashboard
             </a>
+
         </div>
     </div>
 
@@ -142,6 +150,7 @@
                 Enviar
             </button>
         </div>
+
     </form>
 </div>
 {% endblock %}

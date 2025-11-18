@@ -28,3 +28,4 @@ class LocalForm(forms.ModelForm):
         labels = {
             'nome': 'Nome do Local',
         }
+

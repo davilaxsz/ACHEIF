@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect 
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -119,7 +119,7 @@ def criar_categoria(request):
             form.save()
             if next_url:
                 return redirect(next_url)
-            return redirect('objetos:listar_categorias')
+            return redirect('objetos:criar_objeto')
     else:
         form = CategoriaForm()
 
@@ -184,7 +184,4 @@ def apagar_local(request, pk):
     local = get_object_or_404(Local, pk=pk)
     local.delete()
     return redirect('objetos:listar_locais')
-
-
-
 

@@ -6,6 +6,15 @@
 {% block active_locais %}bg-emerald-700 text-white{% endblock %}
 
 {% block content %}
+
+<!-- Botão Voltar alinhado exatamente no "C" de Locais -->
+<div class="mb-4 ml-[33px]">
+    <a href="{% url 'objetos:dashboard' %}" 
+       class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
+        ← Voltar
+    </a>
+</div>
+
 <div class="bg-white rounded-lg shadow-md p-6">
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Locais Registrados</h1>
@@ -53,4 +62,5 @@
         </table>
     </div>
 </div>
+
 {% endblock %}

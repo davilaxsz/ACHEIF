@@ -32,22 +32,18 @@ class Objeto(models.Model):
         return f"{self.tipo} ({self.get_status_display()})"
 
 
-
-class Devolucao(models.Model):
-    objeto = models.OneToOneField(
-        Objeto, on_delete=models.CASCADE, related_name="devolucao"
-    )
-    nome_retirante = models.CharField(max_length=100)
-    cpf_retirante = models.CharField(max_length=14)  
-    data_devolucao = models.DateField()
-
-    def __str__(self):
-        return f"Devolução de {self.objeto.tipo} para {self.nome_retirante}"
+class Devolucao(models.Model): 
+    objeto = models.OneToOneField( Objeto, on_delete=models.CASCADE, related_name="devolucao" ) 
+    nome_retirante = models.CharField(max_length=100) 
+    cpf_retirante = models.CharField(max_length=14)
+    data_devolucao = models.DateField() 
     
-class Local(models.Model):
-    nome = models.CharField(max_length=50, unique=True)
-    def __str__(self):
+    def __str__(self): 
+        return f"Devolução de {self.objeto.tipo} para {self.nome_retirante}" 
+    
+class Local(models.Model): 
+    nome = models.CharField(max_length=50, unique=True) 
+
+    def __str__(self): 
         return self.nome
-
- 
-
+    
