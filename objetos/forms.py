@@ -10,6 +10,37 @@ class ObjetoForm(forms.ModelForm):
             'data_achado': forms.DateInput(attrs={'type': 'date'}),
         }
 
+
+
+class ObjetoFiltroForm(forms.Form):
+    nome = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Buscar por nome...'
+        }),
+        label='Nome'
+    )
+
+    categoria = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Categoria (ex: Eletrônico, Documento...)'
+        }),
+        label='Categoria'
+    )
+
+    local = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Local onde foi encontrado...'
+        }),
+        label='Local'
+    )
+
+
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria

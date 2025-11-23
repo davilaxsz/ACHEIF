@@ -22,6 +22,7 @@
         </a>
     </div>
 
+    <!-- Filtros -->
     <form method="GET" class="flex flex-wrap gap-4 mb-6">
         <select name="categoria" class="border rounded px-3 py-2">
             <option value="">Todas Categorias</option>
@@ -61,7 +62,7 @@
                 {% endif %}
             </div>
 
-            <!-- Conteúdo do card -->
+            <!-- Conteúdo -->
             <div class="p-3 flex-1 flex flex-col justify-between">
                 <div>
                     <h3 class="text-md font-semibold text-gray-800">{{ obj.tipo }}</h3>
@@ -103,42 +104,8 @@
         {% endfor %}
     </div>
 
-    <!-- Paginação -->
-    {% if page_obj.has_other_pages %}
-    <nav class="mt-6 flex justify-center">
-        <ul class="flex gap-2">
-            {% if page_obj.has_previous %}
-            <li>
-                <a href="?page={{ page_obj.previous_page_number }}
-                          {% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}
-                          {% if local_selecionado %}&local={{ local_selecionado }}{% endif %}"
-                   class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition">◄ Anterior</a>
-            </li>
-            {% endif %}
-
-            {% for num in page_obj.paginator.page_range %}
-            <li>
-                <a href="?page={{ num }}
-                          {% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}
-                          {% if local_selecionado %}&local={{ local_selecionado }}{% endif %}"
-                   class="px-3 py-1 rounded {% if page_obj.number == num %}bg-emerald-700 text-white{% else %}bg-gray-200 hover:bg-gray-300{% endif %} transition">
-                    {{ num }}
-                </a>
-            </li>
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-            <li>
-                <a href="?page={{ page_obj.next_page_number }}
-                          {% if categoria_selecionada %}&categoria={{ categoria_selecionada }}{% endif %}
-                          {% if local_selecionado %}&local={{ local_selecionado }}{% endif %}"
-                   class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition">Próxima ►</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
+    <!-- Paginação (usando arquivo externo) -->
+    {% include "includes/pagination.html" with page_obj=page_obj categoria=categoria_selecionada local=local_selecionado %}
 
 </div>
 {% endblock %}
-
