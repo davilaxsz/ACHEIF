@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Registros de Devoluções{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- Botão Voltar - no estilo unificado -->
+    <div class="mb-6 -mt-4">
+        <a href="{% url 'objetos:dashboard' %}" 
+           class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
+            ← Voltar
+        </a>
+    </div>
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Objetos Devolvidos</h2>
+        <div class="flex gap-2">
+            <a href="{% url 'objetos:criar_devolucao' %}" 
+               class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded transition font-semibold">
+               + Novo
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="bg-emerald-700 text-white">
+                    <th class="py-3 px-4 text-left">Objeto</th>
+                    <th class="py-3 px-4 text-left">Quem retirou</th>
+                    <th class="py-3 px-4 text-left">Data </th>
+                    <th class="py-3 px-4 text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                <tr class="border-b hover:bg-gray-50 transition">
+                    <td class="py-3 px-4">{{ categoria.objeto }}</td>
+                    <td class="py-3 px-4">{{ categoria.descricao|default:"-" }}</td>
+                    <td class="py-3 px-4">{{ categoria.criado_em|date:"d/m/Y H:i" }}</td>
+                    <td class="py-3 px-4">{{ categoria.atualizado_em|date:"d/m/Y H:i" }}</td>
+                    <td class="py-3 px-4 text-center flex justify-center gap-2">
+                        <a href="{% url 'objetos:editar_categoria' categoria.pk %}" 
+                           class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded transition" 
+                           title="Editar">
+                          Editar
+                        </a>
+                        <form method="post" action="{% url 'objetos:apagar_categoria' categoria.pk %}" style="display:inline;">
+                          {% csrf_token %}
+                          <button type="submit" 
+                                  class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded transition" 
+                                  title="Apagar"
+                                  onclick="return confirm('Tem certeza que deseja apagar essa categoria?');">
+                            Apagar
+                          </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="py-4 text-center text-gray-500">Nenhuma categoria registrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

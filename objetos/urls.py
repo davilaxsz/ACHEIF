@@ -6,7 +6,6 @@ app_name = 'objetos'
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),  # dashboard separado
     path('relatorios/', views.relatorios, name='relatorios'),
-    path('registrar_devolucao/', views.registrar_devolucao, name='registrar_devolucao'),
     path('criar_objeto/', views.criar_objeto, name='criar_objeto'),
     path('listar_objetos/', views.listar_objetos, name='listar_objetos'),
     path('editar/<int:id>/', views.editar_objeto, name='editar_objeto'),
@@ -19,4 +18,6 @@ urlpatterns = [
     path('local/criar/', views.criar_local, name='criar_local'),
     path('local/<int:pk>/editar/', views.editar_local, name='editar_local'),
     path('local/<int:pk>/apagar/', views.apagar_local, name='apagar_local'),
+    path('devolucoes/criar/', views.criar_devolucao, name='criar_devolucao'),
+    path('devolucoes/', views.listar_devolucao, name='listar_devolucao'),
 ]

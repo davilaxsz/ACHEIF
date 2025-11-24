@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .models import Objeto, Categoria, Local
-from .forms import ObjetoForm, CategoriaForm, LocalForm, ObjetoFiltroForm
+from .models import Objeto, Categoria, Local, Devolucao
+from .forms import ObjetoForm, CategoriaForm, LocalForm, ObjetoFiltroForm, DevolucaoForm
 from django.core.paginator import Paginator
 
 @login_required
@@ -44,21 +44,15 @@ def criar_objeto(request):
 
 
 def listar_objetos(request):
-
     objetos = Objeto.objects.all().select_related('categoria')
-
     filtro_form = ObjetoFiltroForm(request.GET or None)
-
     if filtro_form.is_valid():
-
         nome = filtro_form.cleaned_data.get('nome')
         if nome:
             objetos = objetos.filter(tipo__icontains=nome)
-
         categoria = filtro_form.cleaned_data.get('categoria')
         if categoria:
             objetos = objetos.filter(categoria=categoria)
-
         local = filtro_form.cleaned_data.get('local')
         if local:
             objetos = objetos.filter(local_achado=local)
@@ -72,7 +66,6 @@ def listar_objetos(request):
         'page_obj': page_obj,
         'filtro_form': filtro_form,
 
-        # 🔥 AGORA SIM você manda para o template:
         'categorias': Categoria.objects.all(),
         'locais': Local.objects.all(),
 
@@ -189,4 +182,66 @@ def apagar_local(request, pk):
     local = get_object_or_404(Local, pk=pk)
     local.delete()
     return redirect('objetos:listar_locais')
+
+def criar_objeto(request):
+    if request.method == 'POST':
+        form = ObjetoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('objetos:listar_objetos')
+    else:
+        form = ObjetoForm()
+    
+    categorias = Categoria.objects.all()
+    locais = Local.objects.all()
+
+    return render(request, 'objetos/criar_objeto.html', {
+        'form': form,
+        'categorias': categorias,
+        'locais': locais,
+    })
+
+
+
+#CRUD DEVOLUCAO
+def listar_devolucao(request):
+    devolucoes = Devolucao.objects.all()
+    return render(request, 'objetos/devolucao/listar_devolucao.html', {'devolucoes': devolucoes})
+
+def editar_devolucao(request, pk):
+    devolucao = get_object_or_404(Devolucao, pk=pk)
+    if request.method == 'POST':
+        form = DevolucaoForm(request.POST, instance=local)
+        if form.is_valid():
+            form.save()
+            return redirect('objetos:listar_devolucao')
+    else:
+        form = DevolucaoForm(instance=local)
+    return render(request, 'objetos/devolucao/criar_devolucao.html', {'form': form, 'devolucao': devolucao})
+
+@require_POST
+def apagar_devolucao(request, pk):
+    devolucao = get_object_or_404(Devolucao, pk=pk)
+    devolucao.delete()
+    return redirect('objetos:listar_devolucao')
+
+def criar_devolucao(request):
+    if request.method == 'POST':
+        form = DevolucaoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('objetos:listar_devolucao')
+    else:
+        form = DevolucaoForm()
+    
+    devolucoes = Devolucao.objects.all()
+    devolucoes = Devolucao.objects.all()
+
+    return render(request, 'objetos/devolucao/criar_devolucao.html', {
+        'form': form,
+        'devolucoes': devolucoes,
+    })
+
+
+
 

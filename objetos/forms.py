@@ -1,6 +1,6 @@
 
 from django import forms
-from .models import Objeto, Categoria, Local
+from .models import Objeto, Categoria, Local, Devolucao
 
 class ObjetoForm(forms.ModelForm):
     class Meta:
@@ -55,6 +55,17 @@ class LocalForm(forms.ModelForm):
         fields = ['nome']  # campos que vão aparecer no form
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o nome do local'}),
+        }
+        labels = {
+            'nome': 'Nome do Local',
+        }
+
+class DevolucaoForm(forms.ModelForm):
+    class Meta:
+        model = Devolucao
+        fields = ['nome_retirante', 'cpf_retirante', 'data_devolucao'] 
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o nome do '}),
         }
         labels = {
             'nome': 'Nome do Local',
