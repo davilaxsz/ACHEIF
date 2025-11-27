@@ -6,78 +6,77 @@
 
 {% block content %}
 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-
-    <!-- Page Header -->
+    <!-- Cabeçalho da Página -->
     <div class="mb-6 flex justify-between items-center">
         <div>
             <h1 class="text-2xl font-bold text-gray-900 mb-1">Registrar Devolução</h1>
-            <p class="text-gray-600">Registre um item perdido ou encontrado</p>
-        </div>
-
-        <!-- BOTÕES VERDES PADRONIZADOS -->
-        <div class="flex gap-3">
-
-            <!-- Voltar para lista -->
-            <a href="{% url 'objetos:listar_devolucao' %}"
-               class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
-                ← Voltar para lista
-            </a>
-
-            <!-- Dashboard -->
-            <a href="{% url 'objetos:dashboard' %}"
-               class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
-                Dashboard
-            </a>
-
+            <p class="text-gray-600">Selecione o objeto e informe quem retirou.</p>
         </div>
     </div>
 
-    <!-- Form -->
-    <form method="POST" enctype="multipart/form-data" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
+    <!-- Formulário -->
+    <form method="POST" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
         {% csrf_token %}
 
-        <!-- Tipo do Objeto -->
+        <!-- Objeto -->
         <div>
-            <label for="id_tipo" class="block text-sm font-medium text-gray-700 mb-1">
-                Nome do Retirante <span class="text-red-500">*</span>
+            <label for="id_objeto" class="block text-sm font-medium text-gray-700 mb-1">
+                Objeto <span class="text-red-500">*</span>
             </label>
-            {{ form.tipo|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" }}
-            {% if form.tipo.errors %}
-                <p class="text-red-600 text-sm mt-1">{{ form.tipo.errors.0 }}</p>
+            {{ form.objeto|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 cursor-pointer" }}
+            {% if form.objeto.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.objeto.errors.0 }}</p>
+            {% else %}
+                <p class="text-gray-500 text-xs mt-1">Selecione o objeto que será devolvido.</p>
             {% endif %}
         </div>
 
+        <!-- Nome + CPF -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <!-- Data Achado -->
+            <!-- Nome -->
+            <div>
+                <label for="id_nome_resgate" class="block text-sm font-medium text-gray-700 mb-1">
+                    Nome de quem retirou <span class="text-red-500">*</span>
+                </label>
+                {{ form.nome_resgate|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" }}
+                {% if form.nome_resgate.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.nome_resgate.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- CPF -->
+            <div>
+                <label for="id_cpf_resgate" class="block text-sm font-medium text-gray-700 mb-1">
+                    CPF <span class="text-red-500">*</span>
+                </label>
+                {{ form.cpf_resgate|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" }}
+                {% if form.cpf_resgate.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.cpf_resgate.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- Data de Devolução -->
         <div>
-            <label for="id_data_achado" class="block text-sm font-medium text-gray-700 mb-1">
-                Data de retirada <span class="text-red-500">*</span>
+            <label for="id_data_devolucao" class="block text-sm font-medium text-gray-700 mb-1">
+                Data da Devolução <span class="text-red-500">*</span>
             </label>
-            {{ form.data_achado|add_class:"w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" }}
-            {% if form.data_achado.errors %}
-                <p class="text-red-600 text-sm mt-1">{{ form.data_achado.errors.0 }}</p>
+            {{ form.data_devolucao|add_class:"w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" }}
+            {% if form.data_devolucao.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ form.data_devolucao.errors.0 }}</p>
             {% endif %}
         </div>
 
-        <!-- Descrição -->
+        <!-- Botão de Submissão -->
         <div>
-            <label for="id_descricao" class="block text-sm font-medium text-gray-700 mb-1">
-                Cpf do Retirante <span class="text-red-500">*</span>
-            </label>
-            {{ form.descricao|add_class:"w-full h-24 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 resize-none" }}
-            {% if form.descricao.errors %}
-                <p class="text-red-600 text-sm mt-1">{{ form.cpf.errors.0 }}</p>
-            {% endif %}
-        </div>
-        
-        <!-- Submit Button -->
-        <div>
-            <button type="submit"
+            <button type="submit" 
                 class="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition font-medium flex items-center justify-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Enviar
+                Registrar Devolução
             </button>
         </div>
 

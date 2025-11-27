@@ -2,41 +2,22 @@
 {% load widget_tweaks %}
 
 {% block title %}Cadastrar Objeto{% endblock %}
-{% block active_objetos %}active{% endblock %}
+{% block active_objetos %}bg-emerald-700 text-white{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
-    <!-- Page Header -->
-    <div class="mb-6 flex justify-between items-center">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 mb-1">Cadastrar Objeto</h1>
-            <p class="text-gray-600">Registre um item perdido ou encontrado</p>
-        </div>
-
-        <!-- BOTÕES VERDES PADRONIZADOS -->
-        <div class="flex gap-3">
-
-            <!-- Voltar para lista -->
-            <a href="{% url 'objetos:listar_objetos' %}"
-               class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
-                ← Voltar para lista
-            </a>
-
-            <!-- Dashboard -->
-            <a href="{% url 'objetos:dashboard' %}"
-               class="inline-block bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded-lg shadow transition font-semibold">
-                Dashboard
-            </a>
-
-        </div>
+    <!-- Cabeçalho da página -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Cadastrar Objeto</h1>
+        <p class="text-gray-600">Registre um item perdido ou encontrado</p>
     </div>
 
-    <!-- Form -->
-    <form method="POST" enctype="multipart/form-data" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-6">
+    <!-- Formulário -->
+    <form method="POST" enctype="multipart/form-data" class="bg-white rounded-lg shadow-md border border-gray-200 p-6 space-y-6">
         {% csrf_token %}
 
-        <!-- Tipo do Objeto -->
+        <!-- Nome do Objeto -->
         <div>
             <label for="id_tipo" class="block text-sm font-medium text-gray-700 mb-1">
                 Nome do Objeto <span class="text-red-500">*</span>
@@ -47,55 +28,40 @@
             {% endif %}
         </div>
 
+        <!-- Categoria e Local -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Categoria -->
             <div>
                 <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">
                     Categoria <span class="text-red-500">*</span>
                 </label>
-                <div class="flex gap-2">
-                    <select name="categoria" id="categoria"
-                        class="w-full border border-gray-300 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                        <option value="">Selecione uma categoria</option>
-                        {% for cat in categorias %}
-                            <option value="{{ cat.id }}" {% if form.categoria.value|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>
-                                {{ cat.nome }}
-                            </option>
-                        {% endfor %}
-                    </select>
-
-                    <a href="{% url 'objetos:criar_categoria' %}?next={% url 'objetos:criar_objeto' %}"
-                       class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded transition text-sm">
-                       +
-                    </a>
-                </div>
+                <select name="categoria" id="categoria"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                    <option value="">Selecione uma categoria</option>
+                    {% for cat in categorias %}
+                        <option value="{{ cat.id }}" {% if form.categoria.value|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>
+                            {{ cat.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
 
-            <!-- Local -->
             <div>
                 <label for="local_achado" class="block text-sm font-medium text-gray-700 mb-1">
                     Local <span class="text-red-500">*</span>
                 </label>
-                <div class="flex gap-2">
-                    <select name="local_achado" id="local_achado"
-                        class="w-full border border-gray-300 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                        <option value="">Selecione um local</option>
-                        {% for loc in locais %}
-                            <option value="{{ loc.nome }}" {% if form.local_achado.value == loc.nome %}selected{% endif %}>
-                                {{ loc.nome }}
-                            </option>
-                        {% endfor %}
-                    </select>
-
-                    <a href="{% url 'objetos:criar_local' %}?next={% url 'objetos:criar_objeto' %}"
-                       class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded transition text-sm">
-                       +
-                    </a>
-                </div>
+                <select name="local_achado" id="local_achado"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                    <option value="">Selecione um local</option>
+                    {% for loc in locais %}
+                        <option value="{{ loc.nome }}" {% if form.local_achado.value == loc.nome %}selected{% endif %}>
+                            {{ loc.nome }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
 
-        <!-- Data Achado -->
+        <!-- Data -->
         <div>
             <label for="id_data_achado" class="block text-sm font-medium text-gray-700 mb-1">
                 Data <span class="text-red-500">*</span>
@@ -123,7 +89,7 @@
                 Foto do Objeto
             </label>
             <input type="file" name="foto" id="id_foto" accept="image/*"
-                   class="w-full border border-gray-300 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                   class="w-full border border-gray-300 rounded-md px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
             {% if form.foto.errors %}
                 <p class="text-red-600 text-sm mt-1">{{ form.foto.errors.0 }}</p>
             {% endif %}
@@ -134,18 +100,18 @@
             <label class="block text-sm font-medium text-gray-700 mb-1">
                 Status <span class="text-red-500">*</span>
             </label>
-            {{ form.status|add_class:"px-2 py-1 border border-gray-300 rounded-md" }}
+            {{ form.status|add_class:"w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" }}
             {% if form.status.errors %}
                 <p class="text-red-600 text-sm mt-1">{{ form.status.errors.0 }}</p>
             {% endif %}
         </div>
 
-        <!-- Submit Button -->
+        <!-- Botão Enviar -->
         <div>
             <button type="submit"
-                class="w-full bg-emerald-600 text-white py-2 px-4 rounded-md hover:bg-emerald-700 transition font-medium flex items-center justify-center gap-2">
+                class="w-full bg-emerald-700 hover:bg-emerald-800 text-white py-3 px-4 rounded-lg shadow-md font-semibold transition flex items-center justify-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
                 Enviar
             </button>

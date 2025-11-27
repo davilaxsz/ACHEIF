@@ -10,8 +10,6 @@ class ObjetoForm(forms.ModelForm):
             'data_achado': forms.DateInput(attrs={'type': 'date'}),
         }
 
-
-
 class ObjetoFiltroForm(forms.Form):
     nome = forms.CharField(
         required=False,
@@ -63,11 +61,20 @@ class LocalForm(forms.ModelForm):
 class DevolucaoForm(forms.ModelForm):
     class Meta:
         model = Devolucao
-        fields = ['nome_retirante', 'cpf_retirante', 'data_devolucao'] 
+        fields = ['objeto', 'nome_resgate', 'cpf_resgate', 'data_devolucao']
         widgets = {
-            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite o nome do '}),
+            'objeto': forms.Select(attrs={'class': 'form-control'}),
+            'nome_resgate': forms.TextInput(attrs={'class': 'form-control'}),
+            'cpf_resgate': forms.TextInput(attrs={'class': 'form-control'}),
+            'data_devolucao': forms.DateInput(attrs={'type': 'date'}),
         }
-        labels = {
-            'nome': 'Nome do Local',
-        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['objeto'].queryset = Objeto.objects.filter(
+            devolucao__isnull=True,      # não tem devolução
+            status='aguardando'          # ou o status que você usa
+        )
+
 

@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'objetos',
     'usuarios',
     'widget_tweaks',
-    'django_filters',
 ]
 AUTH_USER_MODEL = 'usuarios.UsuarioAdaptado'
 

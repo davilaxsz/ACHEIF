@@ -22,6 +22,6 @@ class ObjetoAdmin(admin.ModelAdmin):
 
 @admin.register(Devolucao)
 class DevolucaoAdmin(admin.ModelAdmin):
-    list_display = ("objeto", "nome_retirante", "cpf_retirante", "data_devolucao")
-    search_fields = ("nome_retirante", "cpf_retirante")
+    list_display = ("objeto", "nome_resgate", "cpf_resgate", "data_devolucao")
+    search_fields = ("nome_resgate", "cpf_resgate")
 
