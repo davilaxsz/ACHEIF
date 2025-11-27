@@ -181,47 +181,6 @@ def apagar_local(request, pk):
     local = get_object_or_404(Local, pk=pk)
     local.delete()
     return redirect('objetos:listar_locais')
-#CRUD CATEGORIA
-def listar_categorias(request):
-    categorias = Categoria.objects.all()
-    return render(request, 'objetos/categoria/listar_categorias.html', {'categorias': categorias})
-
-def criar_categoria(request):
-    next_url = request.GET.get('next') or request.POST.get('next')
-
-    if request.method == 'POST':
-        form = CategoriaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            if next_url:
-                return redirect(next_url)
-            return redirect('objetos:criar_objeto')
-    else:
-        form = CategoriaForm()
-
-    return render(request, 'objetos/categoria/criar_categoria.html', {
-        'form': form,
-        'next': next_url
-    })
-
-def editar_categoria(request, pk):
-    categoria = get_object_or_404(Categoria, pk=pk)
-    if request.method == 'POST':
-        form = CategoriaForm(request.POST, instance=categoria)
-        if form.is_valid():
-            form.save()
-            return redirect('objetos:listar_categorias')
-    else:
-        form = CategoriaForm(instance=categoria)
-    return render(request, 'objetos/categoria/criar_categoria.html', {'form': form, 'categoria': categoria})
-
-def apagar_categoria(request, pk):
-    categoria = get_object_or_404(Categoria, pk=pk)
-    if request.method == 'POST':
-        categoria.delete()
-        return redirect('objetos:listar_categorias')
-    return render(request, 'objetos/confirma_apagar_categoria.html', {'categoria': categoria})
-
 #CRUD DEVOLUCAO
 
 @login_required

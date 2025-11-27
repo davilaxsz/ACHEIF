@@ -15,46 +15,60 @@
 
     <style>
         :root {
-            --primary-green: #0b5e3c; /* Verde escuro */
-            --light-green: #dff4e1;   /* Verde claro suave */
+            --primary-green: #0b5e3c;
+            --secondary-green: #064524;
+            --light-green: #dff4e1;
             --dark-gray: #2C3E50;
             --white: #fff;
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary-green) 0%, #064524 100%);
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--dark-gray);
             padding: 20px;
         }
 
         .login-box {
             background: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+            max-width: 420px;
             width: 100%;
-            padding: 40px 30px;
+            padding: 45px 35px;
+            text-align: center;
+            position: relative;
         }
 
         .login-header {
-            text-align: center;
             margin-bottom: 30px;
             color: var(--primary-green);
         }
 
         .login-header i {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: 10px;
         }
 
         .login-header h2 {
             font-weight: 700;
             margin-bottom: 5px;
+            font-size: 1.8rem;
+        }
+
+        .login-header p {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .login-header .slogan {
+            font-style: italic;
+            font-weight: 500;
+            color: var(--secondary-green);
         }
 
         .form-label {
@@ -64,7 +78,7 @@
 
         .form-control:focus {
             border-color: var(--primary-green);
-            box-shadow: 0 0 0 0.2rem rgba(11, 94, 60, 0.4);
+            box-shadow: 0 0 0 0.2rem rgba(11, 94, 60, 0.35);
         }
 
         .btn-login {
@@ -73,19 +87,18 @@
             font-weight: 700;
             padding: 12px;
             width: 100%;
-            transition: background-color 0.3s ease, transform 0.3s ease;
+            transition: all 0.3s ease;
             color: var(--white);
         }
 
         .btn-login:hover {
-            background-color: #094a2e;
+            background-color: var(--secondary-green);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
         }
 
         .link-register {
             display: block;
-            text-align: center;
             margin-top: 20px;
             color: var(--primary-green);
             font-weight: 600;
@@ -105,6 +118,16 @@
             font-size: 0.85rem;
             margin-top: 4px;
         }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 35px 20px;
+            }
+
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -113,12 +136,13 @@
             <i class="bi bi-box-arrow-in-right"></i>
             <h2>AcheIF Login</h2>
             <p>Entre na sua conta para continuar</p>
+            <div class="slogan">“Recupere seus pertences perdidos com facilidade!”</div>
         </div>
 
         <form method="post" novalidate>
             {% csrf_token %}
 
-            <div class="mb-3">
+            <div class="mb-3 text-start">
                 <label for="{{ form.username.id_for_label }}" class="form-label">Usuário</label>
                 {{ form.username|add_class:"form-control" }}
                 {% if form.username.errors %}
@@ -126,7 +150,7 @@
                 {% endif %}
             </div>
 
-            <div class="mb-3">
+            <div class="mb-3 text-start">
                 <label for="{{ form.password.id_for_label }}" class="form-label">Senha</label>
                 {{ form.password|add_class:"form-control" }}
                 {% if form.password.errors %}
@@ -140,7 +164,7 @@
                 </div>
             {% endif %}
 
-            <button type="submit" class="btn btn-login">
+            <button type="submit" class="btn btn-login mb-3">
                 <i class="bi bi-box-arrow-in-right"></i> Entrar
             </button>
         </form>
