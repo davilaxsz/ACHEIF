@@ -183,7 +183,6 @@ def apagar_local(request, pk):
     return redirect('objetos:listar_locais')
 #CRUD DEVOLUCAO
 
-@login_required
 def listar_devolucao(request):
     devolucoes = Devolucao.objects.select_related('objeto').all().order_by('-data_devolucao')
 
@@ -212,7 +211,6 @@ def listar_devolucao(request):
     })
 
 
-@login_required
 def criar_devolucao(request):
     next_url = request.GET.get('next') or request.POST.get('next')
 
@@ -244,7 +242,6 @@ def criar_devolucao(request):
     })
 
 
-@login_required
 def editar_devolucao(request, pk):
     devolucao = get_object_or_404(Devolucao, pk=pk)
     objeto_antigo = devolucao.objeto
@@ -274,9 +271,7 @@ def editar_devolucao(request, pk):
         'devolucao': devolucao
     })
 
-
 @require_POST
-@login_required
 def apagar_devolucao(request, pk):
     devolucao = get_object_or_404(Devolucao, pk=pk)
 
