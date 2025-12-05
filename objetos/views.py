@@ -5,19 +5,36 @@ from django.contrib import messages
 from .models import Objeto, Categoria, Local, Devolucao
 from .forms import ObjetoForm, CategoriaForm, LocalForm, ObjetoFiltroForm, DevolucaoForm
 from django.core.paginator import Paginator
+from django.db.models import Q
+
 
 def dashboard(request):
-    total_objetos_perdidos = Objeto.objects.filter(status='aguardando').count()
-    total_objetos_achados = Objeto.objects.filter(status='achado').count()  # ajuste o status correto
-    total_devolucoes = Devolucao.objects.count()
+    # ---- BUSCA ----
+    q = request.GET.get("q")  # termo digitado
 
-    objetos_recentes = Objeto.objects.order_by('-data_achado')[:5]  # apenas os 5 mais recentes
+    objetos_recentes = Objeto.objects.order_by('-data_achado')
+
+    if q:
+        objetos_recentes = objetos_recentes.filter(
+            Q(tipo__icontains=q) |
+            Q(descricao__icontains=q) |
+            Q(local_achado__icontains=q) |
+            Q(categoria__nome__icontains=q)
+        )
+
+    objetos_recentes = objetos_recentes[:5]  # mantém só os 5 mais recentes filtrados
+
+    # ---- CONTADORES ----
+    total_objetos_perdidos = Objeto.objects.filter(status='aguardando').count()
+    total_objetos_achados = Objeto.objects.filter(status='achado').count()
+    total_devolucoes = Devolucao.objects.count()
 
     context = {
         'total_objetos_perdidos': total_objetos_perdidos,
         'total_objetos_achados': total_objetos_achados,
         'total_devolucoes': total_devolucoes,
         'objetos_recentes': objetos_recentes,
+        'q': q,  # envia termo de busca pro template
     }
     return render(request, 'objetos/inicio.html', context)
 
