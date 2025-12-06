@@ -120,9 +120,22 @@ def apagar_objeto(request, id):
 
 #CRUD CATEGORIA
 
+from django.core.paginator import Paginator
+
 def listar_categorias(request):
     categorias = Categoria.objects.all()
-    return render(request, 'objetos/categoria/listar_categorias.html', {'categorias': categorias})
+
+    paginator = Paginator(categorias, 10)  # número de itens por página
+    page_number = request.GET.get("page")  # captura ?page=2 etc.
+    page_obj = paginator.get_page(page_number)
+
+    contexto = {
+        "page_obj": page_obj,
+        "categorias": page_obj.object_list,  # opcional, caso o template use
+    }
+
+    return render(request, "objetos/categoria/listar_categorias.html", contexto)
+
 
 def criar_categoria(request):
     next_url = request.GET.get('next') or request.POST.get('next')
@@ -162,8 +175,16 @@ def apagar_categoria(request, pk):
 
 #CRUD LOCAL 
 def listar_locais(request):
-    locais = Local.objects.all()
-    return render(request, 'objetos/local/listar_locais.html', {'locais': locais})
+    locais = Local.objects.all().order_by('nome')  # opcional: ordena por nome
+
+    paginator = Paginator(locais, 10)  # 10 locais por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'objetos/local/listar_locais.html', {
+        'locais': page_obj.object_list,
+        'page_obj': page_obj,
+    })
 
 def criar_local(request):
     next_url = request.GET.get('next') or request.POST.get('next')
@@ -216,7 +237,7 @@ def listar_devolucao(request):
             devolucoes = devolucoes.filter(objeto__status='devolvido')
 
     # Paginação
-    paginator = Paginator(devolucoes, 9)  # 9 por página
+    paginator = Paginator(devolucoes, 10)  # 9 por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
