@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'objetos',
-    'usuarios',
+    'usuarios.apps.UsuariosConfig',
     'widget_tweaks',
 ]
+
 AUTH_USER_MODEL = 'usuarios.UsuarioAdaptado'
 
 

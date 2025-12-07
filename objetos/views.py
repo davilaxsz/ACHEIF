@@ -15,12 +15,7 @@ def dashboard(request):
     objetos_recentes = Objeto.objects.order_by('-data_achado')
 
     if q:
-        objetos_recentes = objetos_recentes.filter(
-            Q(tipo__icontains=q) |
-            Q(descricao__icontains=q) |
-            Q(local_achado__icontains=q) |
-            Q(categoria__nome__icontains=q)
-        )
+        objetos_recentes = objetos_recentes.filter(tipo__icontains=q)  # somente pelo nome
 
     objetos_recentes = objetos_recentes[:5]  # mantém só os 5 mais recentes filtrados
 
@@ -37,6 +32,7 @@ def dashboard(request):
         'q': q,  # envia termo de busca pro template
     }
     return render(request, 'objetos/inicio.html', context)
+
 
 #CRUD OBJETOS 
 

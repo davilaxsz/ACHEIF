@@ -18,31 +18,16 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
 
-                <!-- Logo ACHEIF -->
-                <a href="{% url 'objetos:dashboard' %}" class="flex items-center gap-3 hover:opacity-90 transition">
+                <!-- Logo / Nome ACHEI IF estático -->
+                <div class="flex items-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                         <path d="M16.5 9.4 7.55 4.24"></path>
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                         <polyline points="3.29 7 12 12 20.71 7"></polyline>
                         <line x1="12" x2="12" y1="22" y2="12"></line>
                     </svg>
-                    <h1 class="text-2xl font-extrabold tracking-tight text-white">ACHEIF</h1>
-                </a>
-
-                <!-- Menu -->
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="{% url 'objetos:listar_locais' %}" 
-                       class="px-4 py-2 rounded-md text-sm font-semibold {% block active_locais %}{% endblock %} hover:bg-emerald-700 hover:text-white transition">Locais</a>
-
-                    <a href="{% url 'objetos:listar_objetos' %}" 
-                       class="px-4 py-2 rounded-md text-sm font-semibold {% block active_objetos %}{% endblock %} hover:bg-emerald-700 hover:text-white transition">Objetos</a>
-
-                    <a href="{% url 'objetos:listar_devolucao' %}" 
-                       class="px-4 py-2 rounded-md text-sm font-semibold {% block active_devolucoes %}{% endblock %} hover:bg-emerald-700 hover:text-white transition">Devoluções</a>
-
-                    <a href="{% url 'objetos:listar_categorias' %}" 
-                       class="px-4 py-2 rounded-md text-sm font-semibold {% block active_categorias %}{% endblock %} hover:bg-emerald-700 hover:text-white transition">Categorias</a>
-                </nav>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-white">ACHEI IF</h1>
+                </div>
 
                 <!-- Logout -->
                 <form method="post" action="{% url 'usuarios:logout' %}">

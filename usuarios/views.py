@@ -2,10 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UsuarioAdaptadoCreationForm, LoginForm,PerfilForm
+from .forms import UsuarioAdaptadoCreationForm, LoginForm, PerfilForm
 from django.contrib.auth.models import Group
+from objetos.models import Objeto, Categoria
+from django.core.paginator import Paginator
 
 
+# --- Cadastro de usuários ---
 def cadastrar_usuario(request):
     if request.method == 'POST':
         form = UsuarioAdaptadoCreationForm(request.POST)
@@ -17,17 +20,23 @@ def cadastrar_usuario(request):
             user.groups.add(grupo_simples)
             
             messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')
-            return redirect('login')
+            return redirect('usuarios:login')  # namespace adicionado
     else:
         form = UsuarioAdaptadoCreationForm()
     
     return render(request, 'usuarios/cadastrar.html', {'form': form})
 
 
+# --- Login ---
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('objetos:dashboard')
-    
+        if request.user.username == "admin_fixo":
+            return redirect('objetos:dashboard')  # dashboard do admin fixo
+        elif request.user.groups.filter(name='USUARIO_SIMPLES').exists():
+            return redirect('usuarios:listar_objetos')  # tela de usuários normais
+        else:
+            return redirect('objetos:dashboard')  # outros admins
+
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
@@ -38,10 +47,15 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Bem-vindo, {user.username}!')
-                
-                # Redireciona para a página solicitada ou para listar_vagas
-                next_page = request.GET.get('next', 'objetos:dashboard')
-                return redirect(next_page)
+
+                if user.username == "admin_fixo":
+                    return redirect('objetos:dashboard')
+                elif user.groups.filter(name='USUARIO_SIMPLES').exists():
+                    return redirect('usuarios:listar_objetos')
+                else:
+                    return redirect('objetos:dashboard')
+            else:
+                messages.error(request, 'Usuário ou senha inválidos.')
         else:
             messages.error(request, 'Usuário ou senha inválidos.')
     else:
@@ -50,11 +64,14 @@ def login_view(request):
     return render(request, 'usuarios/login.html', {'form': form})
 
 
+# --- Logout ---
 def logout_view(request):
     logout(request)
     messages.info(request, 'Você saiu do sistema.')
-    return redirect('login')
+    return redirect('usuarios:login')  # namespace adicionado
 
+
+# --- Perfil ---
 @login_required
 def perfil_view(request):
     if request.method == 'POST':
@@ -62,8 +79,48 @@ def perfil_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Perfil atualizado com sucesso!')
-            return redirect('perfil')
+            return redirect('usuarios:perfil')  # namespace adicionado
     else:
         form = PerfilForm(instance=request.user)
     
     return render(request, 'usuarios/perfil.html', {'form': form})
+
+
+# --- Tela exclusiva para usuários ---
+@login_required
+def listar_objetos(request):
+    q = request.GET.get('q', '')  # pega o valor da barra de pesquisa
+    categoria_id = request.GET.get('categoria', '')
+    local_achado = request.GET.get('local', '')
+
+    objetos = Objeto.objects.all().order_by('-data_achado')
+
+    # Filtra pelo nome do objeto se houver pesquisa
+    if q:
+        objetos = objetos.filter(tipo__icontains=q)
+
+    # Filtra por categoria se selecionada
+    if categoria_id:
+        objetos = objetos.filter(categoria__id=categoria_id)
+
+    # Filtra por local se selecionado
+    if local_achado:
+        objetos = objetos.filter(local_achado=local_achado)
+
+    # Paginação
+    paginator = Paginator(objetos, 6)  # 6 objetos por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+
+    # Passa os valores de filtros e a página para o template
+    context = {
+        'objetos': page_obj,  # agora é um Page object
+        'q': q,
+        'categoria_id': categoria_id,
+        'local_achado': local_achado,
+        'categorias': Categoria.objects.all(),
+        'locais': Objeto.objects.values_list('local_achado', flat=True).distinct()
+    }
+
+    return render(request, 'usuarios/listar_objetos.html', context) 

@@ -1,0 +1,64 @@
+<nav class="mt-6">
+    <ul class="flex space-x-2 justify-center items-center text-sm">
+
+        {# Mantém todos os parâmetros da URL, exceto 'page' #}
+        {% with request.GET.urlencode as querystring %}
+            {% if querystring %}
+                {% with querystring|cut:"page="|cut:"&page="|cut:"page" as cleaned_query %}
+                {% endwith %}
+            {% else %}
+                {% with "" as cleaned_query %}
+                {% endwith %}
+            {% endif %}
+        {% endwith %}
+
+        {# Botão Anterior #}
+        <li>
+            {% if page_obj.has_previous %}
+                <a href="?{% if cleaned_query %}{{ cleaned_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                   class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+                    ◄ Anterior
+                </a>
+            {% else %}
+                <span class="px-3 py-1 bg-gray-100 text-gray-400 rounded cursor-not-allowed">
+                    ◄ Anterior
+                </span>
+            {% endif %}
+        </li>
+
+        {# Números das páginas #}
+        {% for num in page_obj.paginator.page_range %}
+        <li>
+            <a href="?{% if cleaned_query %}{{ cleaned_query }}&{% endif %}page={{ num }}"
+               class="px-3 py-1 rounded 
+               {% if page_obj.number == num %}
+                    bg-emerald-700 text-white
+               {% else %}
+                    bg-gray-200 hover:bg-gray-300
+               {% endif %}">
+                {{ num }}
+            </a>
+        </li>
+        {% endfor %}
+
+        {# Botão Próxima #}
+        <li>
+            {% if page_obj.has_next %}
+                <a href="?{% if cleaned_query %}{{ cleaned_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+                   class="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded">
+                    Próxima ►
+                </a>
+            {% else %}
+                <span class="px-3 py-1 bg-gray-100 text-gray-400 rounded cursor-not-allowed">
+                    Próxima ►
+                </span>
+            {% endif %}
+        </li>
+
+    </ul>
+
+    <p class="text-center text-gray-600 mt-2">
+        Mostrando {{ page_obj.start_index }} - {{ page_obj.end_index }}
+        de {{ page_obj.paginator.count }} itens
+    </p>
+</nav>
