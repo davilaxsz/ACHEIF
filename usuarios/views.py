@@ -11,16 +11,13 @@ from django.core.paginator import Paginator
 # --- Cadastro de usuários ---
 def cadastrar_usuario(request):
     if request.method == 'POST':
-        form = UsuarioAdaptadoCreationForm(request.POST)
+        form = UsuarioAdaptadoCreationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
-            
-            # Adicionar usuário ao grupo USUARIO_SIMPLES por padrão
             grupo_simples, created = Group.objects.get_or_create(name='USUARIO_SIMPLES')
             user.groups.add(grupo_simples)
-            
             messages.success(request, 'Cadastro realizado com sucesso! Faça login para continuar.')
-            return redirect('usuarios:login')  # namespace adicionado
+            return redirect('usuarios:login')
     else:
         form = UsuarioAdaptadoCreationForm()
     
@@ -74,16 +71,18 @@ def logout_view(request):
 # --- Perfil ---
 @login_required
 def perfil_view(request):
+    user = request.user
     if request.method == 'POST':
-        form = PerfilForm(request.POST, request.FILES, instance=request.user)
+        form = PerfilForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Perfil atualizado com sucesso!')
-            return redirect('usuarios:perfil')  # namespace adicionado
+            return redirect('usuarios:perfil')
     else:
-        form = PerfilForm(instance=request.user)
+        form = PerfilForm(instance=user)
     
-    return render(request, 'usuarios/perfil.html', {'form': form})
+    return render(request, 'usuarios/perfil.html', {'form': form, 'user': user})
+
 
 
 # --- Tela exclusiva para usuários ---

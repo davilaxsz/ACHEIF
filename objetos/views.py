@@ -9,7 +9,7 @@ from django.db.models import Q
 
 
 def dashboard(request):
-    # ---- BUSCA ----
+    #BUSCA
     q = request.GET.get("q")  # termo digitado
 
     objetos_recentes = Objeto.objects.order_by('-data_achado')
@@ -19,7 +19,7 @@ def dashboard(request):
 
     objetos_recentes = objetos_recentes[:5]  # mantém só os 5 mais recentes filtrados
 
-    # ---- CONTADORES ----
+    #CONTADORES DASHBOARD
     total_objetos_perdidos = Objeto.objects.filter(status='aguardando').count()
     total_objetos_achados = Objeto.objects.filter(status='achado').count()
     total_devolucoes = Devolucao.objects.count()
@@ -29,7 +29,7 @@ def dashboard(request):
         'total_objetos_achados': total_objetos_achados,
         'total_devolucoes': total_devolucoes,
         'objetos_recentes': objetos_recentes,
-        'q': q,  # envia termo de busca pro template
+        'q': q,  
     }
     return render(request, 'objetos/inicio.html', context)
 
@@ -45,7 +45,7 @@ def criar_objeto(request):
     else:
         form = ObjetoForm()
     
-    categorias = Categoria.objects.all()
+    categorias = Categoria.objects.all() #para filtros posteriormente
     locais = Local.objects.all()
 
     return render(request, 'objetos/criar_objeto.html', {
@@ -56,11 +56,11 @@ def criar_objeto(request):
 
 
 def listar_objetos(request):
-    objetos = Objeto.objects.all().order_by('-data_achado')  # ordem opcional
+    objetos = Objeto.objects.all().order_by('-data_achado') 
     categorias = Categoria.objects.all()
     locais = Local.objects.all()
 
-    # Filtros
+    # Filtros por categoria e local
     categoria_selecionada = request.GET.get('categoria', '')
     local_selecionado = request.GET.get('local', '')
 
@@ -70,7 +70,7 @@ def listar_objetos(request):
         objetos = objetos.filter(local_achado=local_selecionado)
 
     # Paginação
-    paginator = Paginator(objetos, 6)  # 6 objetos por página
+    paginator = Paginator(objetos, 6) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

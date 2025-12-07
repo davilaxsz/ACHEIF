@@ -18,31 +18,49 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
 
-                <!-- Logo / Nome ACHEI IF estático -->
-                <div class="flex items-center gap-3">
+                <!-- Logo ACHEIF -->
+                <a class="flex items-center gap-3 hover:opacity-90 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
                         <path d="M16.5 9.4 7.55 4.24"></path>
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                         <polyline points="3.29 7 12 12 20.71 7"></polyline>
                         <line x1="12" x2="12" y1="22" y2="12"></line>
                     </svg>
-                    <h1 class="text-2xl font-extrabold tracking-tight text-white">ACHEI IF</h1>
-                </div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-white">ACHEIF</h1>
+                </a>
 
-                <!-- Logout -->
-                <form method="post" action="{% url 'usuarios:logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="bg-white text-emerald-800 font-bold px-5 py-2 rounded-lg shadow-md hover:bg-gray-100 transition text-sm">
-                        Sair
-                    </button>
-                </form>
+                <!-- Área do usuário -->
+                {% if user.is_authenticated %}
+                <div class="flex items-center gap-4">
+
+                    <!-- Foto ou iniciais -->
+                    <a href="{% url 'usuarios:perfil' %}" class="flex items-center gap-2 hover:opacity-90 transition">
+                        {% if user.foto_perfil %}
+                            <img src="{{ user.foto_perfil.url }}" alt="Foto de Perfil" class="w-10 h-10 rounded-full object-cover border-2 border-white">
+                        {% else %}
+                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-bold border-2 border-white">
+                                {{ user.username|slice:":1"|upper }}
+                            </div>
+                        {% endif %}
+                        <span class="text-white font-medium">{{ user.username }}</span>
+                    </a>
+
+                    <!-- Logout -->
+                    <form method="post" action="{% url 'usuarios:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-white text-emerald-800 font-bold px-4 py-2 rounded-lg shadow-md hover:bg-gray-100 transition text-sm">
+                            Sair
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
 
             </div>
         </div>
     </header>
 
     <!-- Conteúdo Principal -->
-    <main class="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-1 px-4 sm:px-6 lg:px-8 py-8">
         {% block content %}{% endblock %}
     </main>
 
@@ -59,4 +77,3 @@
 
 </body>
 </html>
-

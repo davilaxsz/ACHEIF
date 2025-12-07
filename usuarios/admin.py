@@ -5,18 +5,18 @@ from .models import UsuarioAdaptado
 @admin.register(UsuarioAdaptado)
 class UsuarioAdaptadoAdmin(UserAdmin):
     model = UsuarioAdaptado
-    list_display = ['username', 'email', 'cpf', 'nome_cidade', 'is_staff', 'is_active']
+    list_display = ['username', 'email', 'cpf', 'is_staff', 'is_active']
     list_filter = ['is_staff', 'is_active', 'groups']
-    search_fields = ['username', 'email', 'cpf', 'nome_mae']
+    search_fields = ['username', 'email', 'cpf']
     
     fieldsets = UserAdmin.fieldsets + (
         ('Informações Adicionais', {
-            'fields': ('cpf', 'nome_cidade', 'nome_mae', 'endereco', 'nome_bairro')
+            'fields': ('cpf', 'foto_perfil')
         }),
     )
     
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Informações Adicionais', {
-            'fields': ('cpf', 'nome_cidade', 'nome_mae', 'endereco', 'nome_bairro')
+            'fields': ('cpf', 'foto_perfil')
         }),
     )
