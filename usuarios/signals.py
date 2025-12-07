@@ -11,10 +11,8 @@ CPF_FIXO_ADMIN = '00000000000' # Exemplo de CPF dummy
 def criar_usuario_fixo(sender, **kwargs):
     User = get_user_model()
     
-    # Adicionamos uma verificação para garantir que o signal só rode
-    # para o app 'usuarios', evitando execuções desnecessárias.
+    # Adicionamos uma verificação para garantir que o signal só rode para o app 'usuarios', evitando execuções desnecessárias.
     if sender.name == 'usuarios':
-        
         # 1. Tenta obter o usuário pelo username. Se não existir, ele o cria.
         # O 'defaults' é usado apenas na criação do objeto.
         usuario, created = User.objects.get_or_create(

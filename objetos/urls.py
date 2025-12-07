@@ -4,7 +4,7 @@ from . import views
 app_name = 'objetos'
 
 urlpatterns = [
-    path('', views.dashboard, name='dashboard'),  # dashboard separado
+    path('', views.dashboard, name='dashboard'), 
     path('criar_objeto/', views.criar_objeto, name='criar_objeto'),
     path('listar_objetos/', views.listar_objetos, name='listar_objetos'),
     path('editar/<int:id>/', views.editar_objeto, name='editar_objeto'),

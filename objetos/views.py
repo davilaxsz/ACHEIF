@@ -15,9 +15,9 @@ def dashboard(request):
     objetos_recentes = Objeto.objects.order_by('-data_achado')
 
     if q:
-        objetos_recentes = objetos_recentes.filter(tipo__icontains=q)  # somente pelo nome
+        objetos_recentes = objetos_recentes.filter(tipo__icontains=q) 
 
-    objetos_recentes = objetos_recentes[:5]  # mantém só os 5 mais recentes filtrados
+    objetos_recentes = objetos_recentes[:5] 
 
     #CONTADORES DASHBOARD
     total_objetos_perdidos = Objeto.objects.filter(status='aguardando').count()
@@ -60,7 +60,6 @@ def listar_objetos(request):
     categorias = Categoria.objects.all()
     locais = Local.objects.all()
 
-    # Filtros por categoria e local
     categoria_selecionada = request.GET.get('categoria', '')
     local_selecionado = request.GET.get('local', '')
 
@@ -69,7 +68,6 @@ def listar_objetos(request):
     if local_selecionado:
         objetos = objetos.filter(local_achado=local_selecionado)
 
-    # Paginação
     paginator = Paginator(objetos, 6) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -115,19 +113,16 @@ def apagar_objeto(request, id):
     return redirect('objetos:listar_objetos')
 
 #CRUD CATEGORIA
-
-from django.core.paginator import Paginator
-
 def listar_categorias(request):
     categorias = Categoria.objects.all()
 
-    paginator = Paginator(categorias, 10)  # número de itens por página
-    page_number = request.GET.get("page")  # captura ?page=2 etc.
+    paginator = Paginator(categorias, 10) 
+    page_number = request.GET.get("page")  
     page_obj = paginator.get_page(page_number)
 
     contexto = {
         "page_obj": page_obj,
-        "categorias": page_obj.object_list,  # opcional, caso o template use
+        "categorias": page_obj.object_list, 
     }
 
     return render(request, "objetos/categoria/listar_categorias.html", contexto)
@@ -171,9 +166,9 @@ def apagar_categoria(request, pk):
 
 #CRUD LOCAL 
 def listar_locais(request):
-    locais = Local.objects.all().order_by('nome')  # opcional: ordena por nome
+    locais = Local.objects.all().order_by('nome') 
 
-    paginator = Paginator(locais, 10)  # 10 locais por página
+    paginator = Paginator(locais, 10)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -215,11 +210,10 @@ def apagar_local(request, pk):
     local = get_object_or_404(Local, pk=pk)
     local.delete()
     return redirect('objetos:listar_locais')
-#CRUD DEVOLUCAO
 
+#CRUD DEVOLUCAO
 def listar_devolucao(request):
     devolucoes = Devolucao.objects.select_related('objeto').all().order_by('-data_devolucao')
-
     # Filtros
     busca = request.GET.get('busca', '')
     status = request.GET.get('status', '')
@@ -231,14 +225,12 @@ def listar_devolucao(request):
             devolucoes = devolucoes.filter(objeto__status='aguardando')
         elif status == 'devolvido':
             devolucoes = devolucoes.filter(objeto__status='devolvido')
-
-    # Paginação
-    paginator = Paginator(devolucoes, 10)  # 9 por página
+    paginator = Paginator(devolucoes, 10) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, 'objetos/devolucao/listar_devolucao.html', {
-        'devolucoes': page_obj,  # aqui devolucoes = page_obj
+        'devolucoes': page_obj, 
         'page_obj': page_obj,
         'busca': busca,
         'status': status,
@@ -254,7 +246,6 @@ def criar_devolucao(request):
             devolucao = form.save(commit=False)
             objeto = devolucao.objeto
 
-            # segurança extra: verificar se o objeto já foi devolvido
             if objeto.status == 'devolvido':
                 messages.error(request, "Este objeto já foi devolvido!")
                 return redirect("objetos:listar_devolucao")

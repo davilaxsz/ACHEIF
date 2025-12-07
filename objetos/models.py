@@ -10,8 +10,6 @@ class Categoria(models.Model):
         return self.nome
 
 
-from django.db import models
-
 class Objeto(models.Model):
     STATUS_CHOICES = [
         ('aguardando', 'Aguardando Devolução'),

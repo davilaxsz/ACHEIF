@@ -7,8 +7,6 @@ from django.contrib.auth.models import Group
 from objetos.models import Objeto, Categoria
 from django.core.paginator import Paginator
 
-
-# --- Cadastro de usuários ---
 def cadastrar_usuario(request):
     if request.method == 'POST':
         form = UsuarioAdaptadoCreationForm(request.POST, request.FILES)
@@ -24,15 +22,12 @@ def cadastrar_usuario(request):
     return render(request, 'usuarios/cadastrar.html', {'form': form})
 
 
-
-
-# --- Login ---
 def login_view(request):
     if request.user.is_authenticated:
         if request.user.username == "admin_fixo":
-            return redirect('objetos:dashboard')  # dashboard do admin fixo
+            return redirect('objetos:dashboard')  # vai para dashboard do admin fixo
         elif request.user.groups.filter(name='USUARIO_SIMPLES').exists():
-            return redirect('usuarios:listar_objetos')  # tela de usuários normais
+            return redirect('usuarios:listar_objetos')  # vai para tela de usuários normais
         else:
             return redirect('objetos:dashboard')  # outros admins
 
@@ -62,18 +57,14 @@ def login_view(request):
     
     return render(request, 'usuarios/login.html', {'form': form})
 
-
-# --- Logout ---
 def logout_view(request):
     logout(request)
     messages.info(request, 'Você saiu do sistema.')
-    return redirect('usuarios:login')  # namespace adicionado
+    return redirect('usuarios:login') 
 
-
-# --- Perfil ---
 @login_required
 def perfil_view(request):
-    user = request.user
+    user = request.user #usuario logado
     if request.method == 'POST':
         form = PerfilForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
@@ -85,38 +76,26 @@ def perfil_view(request):
     
     return render(request, 'usuarios/perfil.html', {'form': form, 'user': user})
 
-
-
-# --- Tela exclusiva para usuários ---
+#Tela exclusiva para usuários
 @login_required
 def listar_objetos(request):
     q = request.GET.get('q', '')  # pega o valor da barra de pesquisa
     categoria_id = request.GET.get('categoria', '')
     local_achado = request.GET.get('local', '')
-
     objetos = Objeto.objects.all().order_by('-data_achado')
 
-    # Filtra pelo nome do objeto se houver pesquisa
     if q:
         objetos = objetos.filter(tipo__icontains=q)
-
-    # Filtra por categoria se selecionada
     if categoria_id:
         objetos = objetos.filter(categoria__id=categoria_id)
-
-    # Filtra por local se selecionado
     if local_achado:
         objetos = objetos.filter(local_achado=local_achado)
 
-    # Paginação
-    paginator = Paginator(objetos, 6)  # 6 objetos por página
+    paginator = Paginator(objetos, 6)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
-
-    # Passa os valores de filtros e a página para o template
     context = {
-        'objetos': page_obj,  # agora é um Page object
+        'objetos': page_obj, 
         'q': q,
         'categoria_id': categoria_id,
         'local_achado': local_achado,
@@ -126,15 +105,13 @@ def listar_objetos(request):
 
     return render(request, 'usuarios/listar_objetos.html', context) 
 
-
-# Decorator que garante que apenas superusuários podem acessar
 def superuser_required(view_func):
     decorated_view_func = user_passes_test(lambda u: u.is_superuser)(view_func)
     return decorated_view_func
 
-
 @superuser_required
 def listar_usuarios(request):
+    #caso coloque filtro
     User = get_user_model()
     q = request.GET.get('q', '')
 
