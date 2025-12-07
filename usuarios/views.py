@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import UsuarioAdaptadoCreationForm, LoginForm, PerfilForm
 from django.contrib.auth.models import Group
 from objetos.models import Objeto, Categoria
@@ -22,6 +22,8 @@ def cadastrar_usuario(request):
         form = UsuarioAdaptadoCreationForm()
     
     return render(request, 'usuarios/cadastrar.html', {'form': form})
+
+
 
 
 # --- Login ---
@@ -123,3 +125,43 @@ def listar_objetos(request):
     }
 
     return render(request, 'usuarios/listar_objetos.html', context) 
+
+
+# Decorator que garante que apenas superusuários podem acessar
+def superuser_required(view_func):
+    decorated_view_func = user_passes_test(lambda u: u.is_superuser)(view_func)
+    return decorated_view_func
+
+
+@superuser_required
+def listar_usuarios(request):
+    User = get_user_model()
+    q = request.GET.get('q', '')
+
+    usuarios = User.objects.all().order_by('username')
+
+    if q:
+        usuarios = usuarios.filter(username__icontains=q)
+
+    paginator = Paginator(usuarios, 10)  # 10 usuários por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'usuarios': page_obj,
+        'q': q
+    }
+    return render(request, 'usuarios/listar_usuarios.html', context)
+
+
+@login_required
+@superuser_required
+def deletar_usuario(request, user_id):
+    User = get_user_model()
+    usuario = get_object_or_404(User, id=user_id)
+    if usuario.is_superuser:
+        messages.error(request, "Não é possível deletar o superusuário.")
+        return redirect('usuarios:listar_usuarios')
+    usuario.delete()
+    messages.success(request, f"Usuário {usuario.username} deletado com sucesso!")
+    return redirect('usuarios:listar_usuarios')

@@ -42,7 +42,14 @@
 
                     <a href="{% url 'objetos:listar_categorias' %}" 
                        class="px-4 py-2 rounded-md text-sm font-semibold {% block active_categorias %}{% endblock %} hover:bg-emerald-700 hover:text-white transition">Categorias</a>
-                </nav>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'usuarios:listar_usuarios' %}" 
+                        class="px-4 py-2 rounded-md text-sm font-semibold hover:bg-emerald-700 hover:text-white transition">
+                        Gerenciar Usuários
+                    </a>
+                    {% endif %}
+
+                    </nav>
 
                 <!-- Logout -->
                 <form method="post" action="{% url 'usuarios:logout' %}">

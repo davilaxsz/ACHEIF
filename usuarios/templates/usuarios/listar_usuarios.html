@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciar Usuários - ACHEIF{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-8">
+    <h2 class="text-2xl font-bold text-gray-700 mb-6">Lista de Usuários</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-emerald-800 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Foto</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Username</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Email</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">CPF</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for u in usuarios %}
+                <tr>
+                    <td class="px-6 py-4">
+                        {% if u.foto_perfil %}
+                            <img src="{{ u.foto_perfil.url }}" alt="Foto de Perfil" class="w-10 h-10 rounded-full object-cover">
+                        {% else %}
+                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 font-bold">
+                                {{ u.username|slice:":1" }}
+                            </div>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-gray-700">{{ u.username }}</td>
+                    <td class="px-6 py-4 text-gray-700">{{ u.email }}</td>
+                    <td class="px-6 py-4 text-gray-700">{{ u.cpf }}</td>
+                    <td class="px-6 py-4">
+                        {% if not u.is_superuser %}
+                        <a href="{% url 'usuarios:deletar_usuario' u.id %}" 
+                           onclick="return confirm('Tem certeza que deseja deletar {{ u.username }}?')"
+                           class="bg-red-600 text-white px-4 py-1 rounded-lg hover:bg-red-700 transition text-sm">
+                           Deletar
+                        </a>
+                        {% else %}
+                        <span class="text-gray-400 text-sm">Superusuário</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
